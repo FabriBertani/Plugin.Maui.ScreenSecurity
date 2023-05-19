@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="ScreenSecuritySample.Views.MainPage">
+
+    <ScrollView
+        Padding="16, 0"
+        HorizontalScrollBarVisibility="Never">
+        <VerticalStackLayout
+            VerticalOptions="Center">
+            <VerticalStackLayout
+                IsVisible="{x:OnPlatform Android='True', iOS='False'}">
+                <Button
+                    Margin="16"
+                    HorizontalOptions="FillAndExpand"
+                    Text="OPEN SECURITY SCREEN TEST PAGE"
+                    Clicked="OpenSecurityScreenTestPage_Clicked" />
+                <Button
+                    Margin="16"
+                    HorizontalOptions="FillAndExpand"
+                    Text="OPEN SECURED PAGE"
+                    Clicked="OpenSecuredPage_Clicked" />
+            </VerticalStackLayout>
+            <VerticalStackLayout
+                VerticalOptions="Center"
+                IsVisible="{x:OnPlatform Android='False', iOS='True'}">
+                <Button
+                    Margin="16"
+                    HorizontalOptions="FillAndExpand"
+                    Text="OPEN BLUR PROTECTION PAGE"
+                    Clicked="OpenBlurProtectionPage_Clicked" />
+                <Button
+                    Margin="16"
+                    HorizontalOptions="FillAndExpand"
+                    Text="OPEN COLOR PROTECTION PAGE"
+                    Clicked="OpenColorProtectionPage_Clicked" />
+                <Button
+                    Margin="16"
+                    HorizontalOptions="FillAndExpand"
+                    Text="OPEN IMAGE PROTECTION PAGE"
+                    Clicked="OpenImageProtectionPage_Clicked" />
+                <Button
+                    Margin="16"
+                    HorizontalOptions="FillAndExpand"
+                    Text="OPEN RECORDING PROTECTION PAGE"
+                    Clicked="OpenRecordingProtectionPage_Clicked" />
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

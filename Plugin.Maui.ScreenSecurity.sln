@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin.Maui.ScreenSecurity", "Plugin.Maui.ScreenSecurity\Plugin.Maui.ScreenSecurity.csproj", "{C9913AAB-598A-43EF-93E9-6FA4AE4CCAEC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{F0127D89-F3B5-4C88-9016-5CCA2DBF3F59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScreenSecuritySample", "samples\ScreenSecuritySample\ScreenSecuritySample.csproj", "{479D2E8B-47FB-4F0D-B1AB-3DF4CC7D28A5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C9913AAB-598A-43EF-93E9-6FA4AE4CCAEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9913AAB-598A-43EF-93E9-6FA4AE4CCAEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9913AAB-598A-43EF-93E9-6FA4AE4CCAEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9913AAB-598A-43EF-93E9-6FA4AE4CCAEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{479D2E8B-47FB-4F0D-B1AB-3DF4CC7D28A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{479D2E8B-47FB-4F0D-B1AB-3DF4CC7D28A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{479D2E8B-47FB-4F0D-B1AB-3DF4CC7D28A5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{479D2E8B-47FB-4F0D-B1AB-3DF4CC7D28A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{479D2E8B-47FB-4F0D-B1AB-3DF4CC7D28A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{479D2E8B-47FB-4F0D-B1AB-3DF4CC7D28A5}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{479D2E8B-47FB-4F0D-B1AB-3DF4CC7D28A5} = {F0127D89-F3B5-4C88-9016-5CCA2DBF3F59}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FB29A9B4-E0B3-4C0E-9E67-D98FC2F3E4EB}
+	EndGlobalSection
+EndGlobal

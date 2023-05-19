@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="ScreenSecuritySample.Views.ColorProtectionPage"
+    Title="ColorProtectionPage">
+    <VerticalStackLayout
+        VerticalOptions="Center">
+        <Button
+            Margin="16"
+            BackgroundColor="ForestGreen"
+            HorizontalOptions="FillAndExpand"
+            Text="ACTIVATE COLOR PROTECTION"
+            TextColor="White"
+            Clicked="ActivateColorProtection_Clicked" />
+        <Button
+            Margin="16"
+            BackgroundColor="DarkRed"
+            HorizontalOptions="FillAndExpand"
+            Text="DEACTIVATE COLOR PROTECTION"
+            TextColor="White"
+            Clicked="DeactivateColorProtection_Clicked" />
+    </VerticalStackLayout>
+</ContentPage>
