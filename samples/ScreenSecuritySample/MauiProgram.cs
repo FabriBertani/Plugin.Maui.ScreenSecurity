@@ -27,6 +27,7 @@ public static class MauiProgram
         builder.Services.AddTransient<ColorProtectionPage>();
         builder.Services.AddTransient<ImageProtectionPage>();
         builder.Services.AddTransient<RecordingProtectionPage>();
+        builder.Services.AddTransient<ScreenshotProtectionPage>();
 
         builder.Services.AddSingleton<IScreenSecurity>(ScreenSecurity.Default);
 

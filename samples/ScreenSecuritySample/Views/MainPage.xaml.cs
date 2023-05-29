@@ -36,4 +36,9 @@ public partial class MainPage : ContentPage
     {
         await Shell.Current.GoToAsync("recording_protection");
     }
+
+    private async void OpenScreenshotProtectionPage_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("screenshot_protection");
+    }
 }
