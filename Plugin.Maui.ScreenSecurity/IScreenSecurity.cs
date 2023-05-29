@@ -89,5 +89,18 @@ public interface IScreenSecurity
     /// </summary>
     /// <remarks>Supported for <b><c>iOS</c></b> only.</remarks>
     void DisableScreenRecordingProtection();
+#elif WINDOWS
+    /// <summary>
+    /// Prevent screen content from being exposed when taking
+    /// a <b><c>screenshot</c></b> by the system or any external app.
+    /// </summary>
+    /// <remarks>Supported for <b><c>Windows</c></b> only.</remarks>
+    void EnableScreenshotProtection();
+
+    /// <summary>
+    /// Re-enables content exposure when taking a screenshot.
+    /// </summary>
+    /// <remarks>Supported for <b><c>Windows</c></b> only.</remarks>
+    void DisableScreenshotProtection();
 #endif
 }
