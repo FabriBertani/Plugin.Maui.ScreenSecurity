@@ -22,5 +22,6 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("color_protection", typeof(ColorProtectionPage));
         Routing.RegisterRoute("image_protection", typeof(ImageProtectionPage));
         Routing.RegisterRoute("recording_protection", typeof(RecordingProtectionPage));
+        Routing.RegisterRoute("screenshot_protection", typeof(ScreenshotProtectionPage));
     }
 }

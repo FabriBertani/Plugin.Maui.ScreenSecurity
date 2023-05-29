@@ -10,7 +10,7 @@
         <VerticalStackLayout
             VerticalOptions="Center">
             <VerticalStackLayout
-                IsVisible="{x:OnPlatform Android='True', iOS='False'}">
+                IsVisible="{x:OnPlatform Android='True', iOS='False', WinUI='False'}">
                 <Button
                     Margin="16"
                     HorizontalOptions="FillAndExpand"
@@ -24,7 +24,7 @@
             </VerticalStackLayout>
             <VerticalStackLayout
                 VerticalOptions="Center"
-                IsVisible="{x:OnPlatform Android='False', iOS='True'}">
+                IsVisible="{x:OnPlatform Android='False', WinUI='False', iOS='True'}">
                 <Button
                     Margin="16"
                     HorizontalOptions="FillAndExpand"
@@ -45,6 +45,15 @@
                     HorizontalOptions="FillAndExpand"
                     Text="OPEN RECORDING PROTECTION PAGE"
                     Clicked="OpenRecordingProtectionPage_Clicked" />
+            </VerticalStackLayout>
+            <VerticalStackLayout
+                VerticalOptions="Center"
+                IsVisible="{x:OnPlatform Android='False', iOS='False', WinUI='True'}">
+                <Button
+                    Margin="16"
+                    HorizontalOptions="FillAndExpand"
+                    Text="OPEN SCREENSHOT PROTECTION PAGE"
+                    Clicked="OpenScreenshotProtectionPage_Clicked" />
             </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
