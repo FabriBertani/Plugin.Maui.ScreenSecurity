@@ -1,9 +1,12 @@
-﻿using Android.Views;
+﻿using Android.OS;
+using Android.Views;
 
 namespace Plugin.Maui.ScreenSecurity;
 
 partial class ScreenSecurityImplementation : IScreenSecurity
 {
+    private static volatile Handler? handler;
+
     /// <summary>
     /// Prevent screen content from being exposed when the app
     /// is sent to <b>Background</b> or the <b>Recents screen</b>.
@@ -13,9 +16,15 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     {
         try
         {
-            var activity = Platform.CurrentActivity;
+            if (handler?.Looper != Looper.MainLooper)
+                handler = new Handler(Looper.MainLooper!);
 
-            activity?.Window?.SetFlags(WindowManagerFlags.Secure, WindowManagerFlags.Secure);
+            handler?.Post(() =>
+            {
+                var activity = Platform.CurrentActivity;
+
+                activity?.Window?.SetFlags(WindowManagerFlags.Secure, WindowManagerFlags.Secure);
+            });
         }
         catch (Exception ex)
         {
@@ -33,9 +42,15 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     {
         try
         {
-            var activity = Platform.CurrentActivity;
+            if (handler?.Looper != Looper.MainLooper)
+                handler = new Handler(Looper.MainLooper!);
 
-            activity?.Window?.ClearFlags(WindowManagerFlags.Secure);
+            handler?.Post(() =>
+            {
+                var activity = Platform.CurrentActivity;
+
+                activity?.Window?.ClearFlags(WindowManagerFlags.Secure);
+            });
         }
         catch (Exception ex)
         {
