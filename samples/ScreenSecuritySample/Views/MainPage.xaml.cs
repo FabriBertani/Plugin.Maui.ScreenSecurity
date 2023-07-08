@@ -41,4 +41,9 @@ public partial class MainPage : ContentPage
     {
         await Shell.Current.GoToAsync("screenshot_protection");
     }
+
+    private void OpenIOSScreenshotProtectionPage_Clicked(object sender, EventArgs e)
+    {
+        Dispatcher.DispatchAsync(async () => await Shell.Current.GoToAsync("ios_screenshot_protection"));
+    }
 }

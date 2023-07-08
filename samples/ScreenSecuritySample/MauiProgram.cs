@@ -18,17 +18,21 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        // Android Transient Pages
+        // Register Android Pages
         builder.Services.AddTransient<SecuredPage>();
         builder.Services.AddTransient<SecurityScreenTestPage>();
 
-        // iOS Transient Pages
+        // Register iOS Pages
         builder.Services.AddTransient<BlurProtectionPage>();
         builder.Services.AddTransient<ColorProtectionPage>();
         builder.Services.AddTransient<ImageProtectionPage>();
         builder.Services.AddTransient<RecordingProtectionPage>();
+        builder.Services.AddScoped<ScreenshotProtectionIOSPage>();
+
+        // Register Windows Pages
         builder.Services.AddTransient<ScreenshotProtectionPage>();
 
+        // Register plugin as Singleton
         builder.Services.AddSingleton<IScreenSecurity>(ScreenSecurity.Default);
 
         return builder.Build();
