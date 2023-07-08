@@ -30,30 +30,6 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
-    <!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android|AnyCPU'">
-        <ApplicationTitle>Plugin.Maui.ScreenSecurity</ApplicationTitle>
-        <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
-        <ApplicationVersion>1</ApplicationVersion>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
-        <ApplicationTitle>Plugin.Maui.ScreenSecurity</ApplicationTitle>
-        <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
-        <ApplicationVersion>1</ApplicationVersion>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
-        <ApplicationTitle>Plugin.Maui.ScreenSecurity</ApplicationTitle>
-        <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
-        <ApplicationVersion>1</ApplicationVersion>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-ios|AnyCPU'">
-        <ApplicationTitle>Plugin.Maui.ScreenSecurity</ApplicationTitle>
-        <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
-        <ApplicationVersion>1</ApplicationVersion>
-    </PropertyGroup>-->
-
 	<ItemGroup>
 	  <None Include="..\Assets\plugin.maui.screensecurity_128x128.jpg">
 	    <Pack>True</Pack>

@@ -45,6 +45,11 @@
                     HorizontalOptions="FillAndExpand"
                     Text="OPEN RECORDING PROTECTION PAGE"
                     Clicked="OpenRecordingProtectionPage_Clicked" />
+                <Button
+                    Margin="16"
+                    HorizontalOptions="FillAndExpand"
+                    Text="OPEN SCREENSHOT PROTECTION PAGE"
+                    Clicked="OpenIOSScreenshotProtectionPage_Clicked" />
             </VerticalStackLayout>
             <VerticalStackLayout
                 VerticalOptions="Center"

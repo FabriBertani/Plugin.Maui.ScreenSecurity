@@ -89,6 +89,19 @@ public interface IScreenSecurity
     /// </summary>
     /// <remarks>Supported for <b><c>iOS</c></b> only.</remarks>
     void DisableScreenRecordingProtection();
+
+    /// <summary>
+    /// Prevent screen content from being exposed when taking a <b><c>screenshot</c></b>
+    /// by placing a black screen.
+    /// </summary>
+    /// <remarks>Supported for <b><c>iOS</c></b> only.</remarks>
+    void EnableScreenshotProtection();
+
+    /// <summary>
+    /// Turn off the screenshot protection.
+    /// </summary>
+    /// <remarks>Supported for <b><c>iOS</c></b> only.</remarks>
+    void DisableScreenshotProtection();
 #elif WINDOWS
     /// <summary>
     /// Prevent screen content from being exposed when taking
