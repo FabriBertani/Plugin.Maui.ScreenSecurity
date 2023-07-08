@@ -1,4 +1,5 @@
-﻿using Plugin.Maui.ScreenSecurity.Platforms.iOS;
+﻿using CoreFoundation;
+using Plugin.Maui.ScreenSecurity.Platforms.iOS;
 using UIKit;
 
 namespace Plugin.Maui.ScreenSecurity;
@@ -12,6 +13,8 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     private UIView? _screenBlur = null;
 
     private UIView? _screenColor = null;
+
+    private UITextField? _secureTextField;
 
     /// <summary>
     /// Prevent screen content from being exposed by using a <b>Blur layer</b> when the app 
@@ -304,6 +307,43 @@ partial class ScreenSecurityImplementation : IScreenSecurity
         });
     }
 
+    /// <summary>
+    /// Prevent screen content from being exposed when taking a <b><c>screenshot</c></b>
+    /// by placing a black screen.
+    /// </summary>
+    public void EnableScreenshotProtection()
+    {
+        try
+        {
+            EnableScreenshotViewProtection(true);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"EnableScreenshotProtection failed with Exception message: {ex.Message}");
+            Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
+            if (ex.InnerException != null)
+                Console.WriteLine($"With InnerException: {ex.InnerException}");
+        }
+    }
+
+    /// <summary>
+    /// Turn off the screenshot protection.
+    /// </summary>
+    public void DisableScreenshotProtection()
+    {
+        try
+        {
+            EnableScreenshotViewProtection(false);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"DisableScreenshotProtection failed with Exception message: {ex.Message}");
+            Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
+            if (ex.InnerException != null)
+                Console.WriteLine($"With InnerException: {ex.InnerException}");
+        }
+    }
+
     private void GetWindow()
     {
         if (_window == null)
@@ -390,5 +430,44 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     {
         _screenImage?.RemoveFromSuperview();
         _screenImage = null;
+    }
+
+    private void EnableScreenshotViewProtection(bool preventScreenshot)
+    {
+        DispatchQueue.MainQueue.DispatchAsync(() =>
+        {
+            GetWindow();
+
+            if (_secureTextField == null)
+            {
+                _secureTextField = new()
+                {
+                    UserInteractionEnabled = false
+                };
+
+                UIViewController? rootViewController = GetRootPresentViewController();
+
+                rootViewController?.View?.AddSubview(_secureTextField);
+                _window?.MakeKeyAndVisible();
+
+                _window?.Layer.SuperLayer?.AddSublayer(_secureTextField.Layer);
+
+                _secureTextField.Layer.Sublayers?[0].AddSublayer(_window!.Layer);
+            }
+
+            _secureTextField.SecureTextEntry = preventScreenshot;
+        });
+    }
+
+    private UIViewController? GetRootPresentViewController()
+    {
+        UIViewController? viewController = _window?.RootViewController;
+
+        while (viewController?.PresentedViewController != null)
+        {
+            viewController = viewController.PresentedViewController;
+        }
+
+        return viewController;
     }
 }
