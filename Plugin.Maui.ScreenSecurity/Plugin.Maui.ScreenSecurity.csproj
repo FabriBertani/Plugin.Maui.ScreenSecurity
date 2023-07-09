@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
         <TargetFrameworks>net7.0-android;net7.0-ios</TargetFrameworks>
@@ -21,13 +21,15 @@
 		<RepositoryUrl>https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>dotnet-maui;maui;toolkit;security;Plugin.Maui.ScreenSecurity;ScreenSecurity;screen;protection;leak;android;ios</PackageTags>
-		<AssemblyVersion>1.0.0</AssemblyVersion>
-		<FileVersion>1.0.0</FileVersion>
+		<AssemblyVersion>1.0.3</AssemblyVersion>
+		<FileVersion>1.0.3-beta</FileVersion>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<NeutralLanguage>en</NeutralLanguage>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageIcon>plugin.maui.screensecurity_128x128.jpg</PackageIcon>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Version>1.0.3-beta</Version>
+		<PackageReleaseNotes>https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/blob/main/CHANGELOG.md</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
