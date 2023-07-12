@@ -7,43 +7,50 @@ public partial class MainPage : ContentPage
         InitializeComponent();
     }
 
-    private async void OpenSecurityScreenTestPage_Clicked(object sender, EventArgs e)
+    private void OpenSecurityScreenTestPage_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("security_screen_test");
+        Navigate("security_screen_test");
     }
 
-    private async void OpenSecuredPage_Clicked(object sender, EventArgs e)
+    private void OpenSecuredPage_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("secured");
+        Navigate("secured");
     }
 
-    private async void OpenBlurProtectionPage_Clicked(object sender, EventArgs e)
+    private void OpenBlurProtectionPage_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("blur_protection");
+        Navigate("blur_protection");        
     }
 
-    private async void OpenColorProtectionPage_Clicked(object sender, EventArgs e)
+    private void OpenColorProtectionPage_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("color_protection");
+        Navigate("color_protection");
     }
 
-    private async void OpenImageProtectionPage_Clicked(object sender, EventArgs e)
+    private void OpenImageProtectionPage_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("image_protection");
+        Navigate("image_protection");
     }
 
-    private async void OpenRecordingProtectionPage_Clicked(object sender, EventArgs e)
+    private void OpenRecordingProtectionPage_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("recording_protection");
+        Navigate("recording_protection");
     }
 
-    private async void OpenScreenshotProtectionPage_Clicked(object sender, EventArgs e)
+    private void OpenScreenshotProtectionPage_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("screenshot_protection");
+        Navigate("screenshot_protection");
     }
 
     private void OpenIOSScreenshotProtectionPage_Clicked(object sender, EventArgs e)
     {
-        Dispatcher.DispatchAsync(async () => await Shell.Current.GoToAsync("ios_screenshot_protection"));
+        Navigate("ios_screenshot_protection");
+    }
+
+    private static void Navigate(string to)
+    {
+        MainThread.InvokeOnMainThreadAsync(async () =>
+            await Shell.Current.GoToAsync(to)
+        );
     }
 }

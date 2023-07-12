@@ -19,18 +19,18 @@ public static class MauiProgram
             });
 
         // Register Android Pages
-        builder.Services.AddTransient<SecuredPage>();
-        builder.Services.AddTransient<SecurityScreenTestPage>();
+        builder.Services.AddScoped<SecuredPage>();
+        builder.Services.AddScoped<SecurityScreenTestPage>();
 
         // Register iOS Pages
-        builder.Services.AddTransient<BlurProtectionPage>();
-        builder.Services.AddTransient<ColorProtectionPage>();
-        builder.Services.AddTransient<ImageProtectionPage>();
-        builder.Services.AddTransient<RecordingProtectionPage>();
+        builder.Services.AddScoped<BlurProtectionPage>();
+        builder.Services.AddScoped<ColorProtectionPage>();
+        builder.Services.AddScoped<ImageProtectionPage>();
+        builder.Services.AddScoped<RecordingProtectionPage>();
         builder.Services.AddScoped<ScreenshotProtectionIOSPage>();
 
         // Register Windows Pages
-        builder.Services.AddTransient<ScreenshotProtectionPage>();
+        builder.Services.AddScoped<ScreenshotProtectionPage>();
 
         // Register plugin as Singleton
         builder.Services.AddSingleton<IScreenSecurity>(ScreenSecurity.Default);
