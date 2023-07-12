@@ -1,12 +1,10 @@
-﻿using Foundation;
-using UIKit;
+﻿using UIKit;
 
 namespace Plugin.Maui.ScreenSecurity.Platforms.iOS;
 
-[Preserve(AllMembers = true)]
 internal static class UIColorExtensions
 {
-    internal static UIColor FromHex(this UIColor color, string hexValue)
+    internal static UIColor FromHex(this UIColor _, string hexValue)
     {
         var colorString = hexValue.TrimStart('#');
 
