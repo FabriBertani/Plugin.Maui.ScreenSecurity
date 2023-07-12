@@ -1,20 +1,11 @@
-﻿using CoreFoundation;
-using Plugin.Maui.ScreenSecurity.Platforms.iOS;
+﻿using Plugin.Maui.ScreenSecurity.Platforms.iOS;
 using UIKit;
 
 namespace Plugin.Maui.ScreenSecurity;
 
 partial class ScreenSecurityImplementation : IScreenSecurity
 {
-    private UIWindow? _window = null;
-
-    private UIImageView? _screenImage = null;
-
-    private UIView? _screenBlur = null;
-
-    private UIView? _screenColor = null;
-
-    private UITextField? _secureTextField;
+    private readonly Lazy<UIWindow?> _window = new(IOSWindowHelper.GetWindow);
 
     /// <summary>
     /// Prevent screen content from being exposed by using a <b>Blur layer</b> when the app 
@@ -26,35 +17,7 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     /// </param>
     public void EnableBlurScreenProtection(ThemeStyle style = ThemeStyle.Light)
     {
-        UIApplication.Notifications.ObserveWillResignActive((sender, args) =>
-        {
-            try
-            {
-                EnableBlurScreen(style);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"EnableBlurScreenProtection failed with Exception message: {ex.Message}");
-                Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"With InnerException: {ex.InnerException}");
-            }
-        });
-
-        UIApplication.Notifications.ObserveDidBecomeActive((sender, args) =>
-        {
-            try
-            {
-                DisableBlurScreen();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"EnableBlurScreenProtection failed with Exception message: {ex.Message}");
-                Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"With InnerException: {ex.InnerException}");
-            }
-        });
+        BlurProtectionManager.HandleBlurProtection(true, style, _window.Value);
     }
 
     /// <summary>
@@ -62,35 +25,7 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     /// </summary>
     public void DisableBlurScreenProtection()
     {
-        UIApplication.Notifications.ObserveWillResignActive((sender, args) =>
-        {
-            try
-            {
-                DisableBlurScreen();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"DisableBlurScreenProtection failed with Exception message: {ex.Message}");
-                Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"With InnerException: {ex.InnerException}");
-            }
-        });
-
-        UIApplication.Notifications.ObserveDidBecomeActive((sender, args) =>
-        {
-            try
-            {
-                DisableBlurScreen();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"DisableBlurScreenProtection failed with Exception message: {ex.Message}");
-                Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"With InnerException: {ex.InnerException}");
-            }
-        });
+        BlurProtectionManager.HandleBlurProtection(false);
     }
 
     /// <summary>
@@ -102,35 +37,7 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     /// <b>#FFFFFF</b> by default.</param>
     public void EnableColorScreenProtection(string hexColor = "#FFFFFF")
     {
-        UIApplication.Notifications.ObserveWillResignActive((sender, args) =>
-        {
-            try
-            {
-                EnableColorScreen(hexColor);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"EnableColorScreenProtection failed with Exception message: {ex.Message}");
-                Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"With InnerException: {ex.InnerException}");
-            }
-        });
-
-        UIApplication.Notifications.ObserveDidBecomeActive((sender, args) =>
-        {
-            try
-            {
-                DisableColorScreen();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"EnableColorScreenProtection failed with Exception message: {ex.Message}");
-                Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"With InnerException: {ex.InnerException}");
-            }
-        });
+        ColorProtectionManager.HandleColorProtection(true, hexColor, _window.Value);
     }
 
     /// <summary>
@@ -138,35 +45,7 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     /// </summary>
     public void DisableColorScreenProtection()
     {
-        UIApplication.Notifications.ObserveWillResignActive((sender, args) =>
-        {
-            try
-            {
-                DisableColorScreen();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"DisableColorScreenProtection failed with Exception message: {ex.Message}");
-                Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"With InnerException: {ex.InnerException}");
-            }
-        });
-
-        UIApplication.Notifications.ObserveDidBecomeActive((sender, args) =>
-        {
-            try
-            {
-                DisableColorScreen();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"DisableColorScreenProtection failed with Exception message: {ex.Message}");
-                Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"With InnerException: {ex.InnerException}");
-            }
-        });
+        ColorProtectionManager.HandleColorProtection(false);
     }
 
     /// <summary>
@@ -176,35 +55,7 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     /// <param name="image">Name with extension of the image to use.</param>
     public void EnableImageScreenProtection(string image)
     {
-        UIApplication.Notifications.ObserveWillResignActive((sender, args) =>
-        {
-            try
-            {
-                EnableImageScreen(image);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"EnableImageScreenProtection failed with Exception message: {ex.Message}");
-                Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"With InnerException: {ex.InnerException}");
-            }
-        });
-
-        UIApplication.Notifications.ObserveDidBecomeActive((sender, args) =>
-        {
-            try
-            {
-                DisableImageScreen();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"EnableImageScreenProtection failed with Exception message: {ex.Message}");
-                Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"With InnerException: {ex.InnerException}");
-            }
-        });
+        ImageProtectionManager.HandleImageProtection(true, image, _window.Value);
     }
 
     /// <summary>
@@ -212,35 +63,7 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     /// </summary>
     public void DisableImageScreenProtection()
     {
-        UIApplication.Notifications.ObserveWillResignActive((sender, args) =>
-        {
-            try
-            {
-                DisableImageScreen();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"DisableImageScreenProtection failed with Exception message: {ex.Message}");
-                Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"With InnerException: {ex.InnerException}");
-            }
-        });
-
-        UIApplication.Notifications.ObserveDidBecomeActive((sender, args) =>
-        {
-            try
-            {
-                DisableImageScreen();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"DisableImageScreenProtection failed with Exception message: {ex.Message}");
-                Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"With InnerException: {ex.InnerException}");
-            }
-        });
+        ImageProtectionManager.HandleImageProtection(false);
     }
 
     /// <summary>
@@ -254,32 +77,7 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     /// It can be mixed with <paramref name="withColor"/>. <b><c>True</c> by default.</b></param>
     public void EnableScreenRecordingProtection(string withColor = "", bool withBlur = true)
     {
-        UIScreen.Notifications.ObserveCapturedDidChange((sender, args) =>
-        {
-            try
-            {
-                if (UIScreen.MainScreen.Captured)
-                {
-                    if (withBlur)
-                        EnableBlurScreen(ThemeStyle.Light);
-
-                    if (!string.IsNullOrEmpty(withColor))
-                        EnableColorScreen(withColor);
-                }
-                else
-                {
-                    DisableBlurScreen();
-                    DisableColorScreen();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"EnableScreenRecordingProtection failed with Exception message: {ex.Message}");
-                Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"With InnerException: {ex.InnerException}");
-            }
-        });
+        ScreenRecordingProtectionManager.HandleScreenRecordingProtection(true, withColor, _window.Value);
     }
 
     /// <summary>
@@ -287,24 +85,7 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     /// </summary>
     public void DisableScreenRecordingProtection()
     {
-        UIScreen.Notifications.ObserveCapturedDidChange((sender, args) =>
-        {
-            try
-            {
-                if (UIScreen.MainScreen.Captured)
-                {
-                    DisableBlurScreen();
-                    DisableColorScreen();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"DisableScreenRecordingProtection failed with Exception message: {ex.Message}");
-                Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"With InnerException: {ex.InnerException}");
-            }
-        });
+        ScreenRecordingProtectionManager.HandleScreenRecordingProtection(false);
     }
 
     /// <summary>
@@ -313,17 +94,7 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     /// </summary>
     public void EnableScreenshotProtection()
     {
-        try
-        {
-            EnableScreenshotViewProtection(true);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"EnableScreenshotProtection failed with Exception message: {ex.Message}");
-            Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-            if (ex.InnerException != null)
-                Console.WriteLine($"With InnerException: {ex.InnerException}");
-        }
+        ScreenshotProtectionManager.HandleScreenshotProtection(true, _window.Value);
     }
 
     /// <summary>
@@ -331,143 +102,6 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     /// </summary>
     public void DisableScreenshotProtection()
     {
-        try
-        {
-            EnableScreenshotViewProtection(false);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"DisableScreenshotProtection failed with Exception message: {ex.Message}");
-            Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-            if (ex.InnerException != null)
-                Console.WriteLine($"With InnerException: {ex.InnerException}");
-        }
-    }
-
-    private void GetWindow()
-    {
-        if (_window == null)
-        {
-            if (UIDevice.CurrentDevice.CheckSystemVersion(15, 0))
-            {
-                _window = UIApplication.SharedApplication.ConnectedScenes
-                    .OfType<UIWindowScene>()
-                    .SelectMany(s => s.Windows)
-                    .FirstOrDefault(w => w.IsKeyWindow);
-            }
-            else if (UIDevice.CurrentDevice.CheckSystemVersion(14, 2))
-                _window = UIApplication.SharedApplication.Windows.FirstOrDefault(o => o.IsKeyWindow);
-            else
-                _window = UIApplication.SharedApplication.KeyWindow;
-        }
-    }
-
-    private void EnableBlurScreen(ThemeStyle style)
-    {
-        GetWindow();
-
-        _screenBlur = UIScreen.MainScreen.SnapshotView(false);
-
-        UIBlurEffectStyle blurEffectStyle =
-            style == ThemeStyle.Light
-                ? UIBlurEffectStyle.Light
-                : UIBlurEffectStyle.Dark;
-
-        var blurEffect = UIBlurEffect.FromStyle(blurEffectStyle);
-
-        var blurBackground = new UIVisualEffectView(blurEffect);
-
-        _screenBlur?.AddSubview(blurBackground);
-
-        blurBackground.Frame = (CoreGraphics.CGRect)_screenBlur?.Frame;
-
-        _window?.AddSubview(_screenBlur);
-    }
-
-    private void DisableBlurScreen()
-    {
-        _screenBlur?.RemoveFromSuperview();
-        _screenBlur = null;
-    }
-
-    private void EnableColorScreen(string hexColor)
-    {
-        GetWindow();
-
-        if (_window != null)
-        {
-            _screenColor = new UIView(_window.Bounds)
-            {
-                BackgroundColor = UIColor.Clear.FromHex(hexColor)
-            };
-
-            _window.AddSubview(_screenColor);
-        }
-    }
-
-    private void DisableColorScreen()
-    {
-        _screenColor?.RemoveFromSuperview();
-        _screenColor = null;
-    }
-
-    private void EnableImageScreen(string image)
-    {
-        GetWindow();
-
-        _screenImage = new UIImageView(UIScreen.MainScreen.Bounds)
-        {
-            Image = new UIImage(image),
-            UserInteractionEnabled = false,
-            ContentMode = UIViewContentMode.ScaleAspectFill,
-            ClipsToBounds = true
-        };
-
-        _window?.AddSubview(_screenImage);
-    }
-
-    private void DisableImageScreen()
-    {
-        _screenImage?.RemoveFromSuperview();
-        _screenImage = null;
-    }
-
-    private void EnableScreenshotViewProtection(bool preventScreenshot)
-    {
-        DispatchQueue.MainQueue.DispatchAsync(() =>
-        {
-            GetWindow();
-
-            if (_secureTextField == null)
-            {
-                _secureTextField = new()
-                {
-                    UserInteractionEnabled = false
-                };
-
-                UIViewController? rootViewController = GetRootPresentViewController();
-
-                rootViewController?.View?.AddSubview(_secureTextField);
-                _window?.MakeKeyAndVisible();
-
-                _window?.Layer.SuperLayer?.AddSublayer(_secureTextField.Layer);
-
-                _secureTextField.Layer.Sublayers?[0].AddSublayer(_window!.Layer);
-            }
-
-            _secureTextField.SecureTextEntry = preventScreenshot;
-        });
-    }
-
-    private UIViewController? GetRootPresentViewController()
-    {
-        UIViewController? viewController = _window?.RootViewController;
-
-        while (viewController?.PresentedViewController != null)
-        {
-            viewController = viewController.PresentedViewController;
-        }
-
-        return viewController;
+        ScreenshotProtectionManager.HandleScreenshotProtection(false);
     }
 }

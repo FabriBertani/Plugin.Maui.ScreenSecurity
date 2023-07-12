@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using Plugin.Maui.ScreenSecurity.Handlers;
+using Plugin.Maui.ScreenSecurity.Platforms.Windows;
 
 using Application = Microsoft.Maui.Controls.Application;
 
@@ -6,9 +7,6 @@ namespace Plugin.Maui.ScreenSecurity;
 
 partial class ScreenSecurityImplementation : IScreenSecurity
 {
-    [LibraryImport("user32.dll")]
-    private static partial uint SetWindowDisplayAffinity(IntPtr hWnd, uint dwAffinity);
-
     private const uint WDA_NONE = 0;
     private const uint WDA_MONITOR = 1;
 
@@ -18,19 +16,7 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     /// </summary>
     public void EnableScreenshotProtection()
     {
-        try
-        {
-            var hwnd = GetWindowHandle();
-
-            _ = SetWindowDisplayAffinity(hwnd, WDA_MONITOR);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"EnableScreenshotProtection failed with Exception message: {ex.Message}");
-            Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-            if (ex.InnerException != null)
-                Console.WriteLine($"With InnerException: {ex.InnerException}");
-        }
+        SetScreenshotProtection(true);
     }
 
     /// <summary>
@@ -38,23 +24,23 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     /// </summary>
     public void DisableScreenshotProtection()
     {
+        SetScreenshotProtection(false);
+    }
+
+    private void SetScreenshotProtection(bool enabled)
+    {
         try
         {
             var hwnd = GetWindowHandle();
 
-            _ = SetWindowDisplayAffinity(hwnd, WDA_NONE);
+            if (hwnd != IntPtr.Zero)
+                _ = NativeMethods.SetWindowDisplayAffinity(hwnd, enabled ? WDA_MONITOR : WDA_NONE);
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"DisableScreenshotProtection failed with Exception message: {ex.Message}");
-            Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-            if (ex.InnerException != null)
-                Console.WriteLine($"With InnerException: {ex.InnerException}");
+            ErrorsHandler.HandleException(nameof(SetScreenshotProtection), ex);
         }
     }
 
-    private static nint GetWindowHandle()
-    {
-        return ((MauiWinUIWindow)Application.Current?.Windows[0].Handler.PlatformView).WindowHandle;
-    }
+    private static nint GetWindowHandle() => ((MauiWinUIWindow)Application.Current?.Windows[0].Handler.PlatformView!).WindowHandle;
 }
