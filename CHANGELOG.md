@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.5-beta (07/17/2023)
+[Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.0.4-beta...v1.0.5-beta)
+
+**Implemented enhancements:**
+- Added unified endpoints to be used on all platforms without preprocessing directives.
+- Renamed `IOSWindowsHelper` to `IOSHelper` and added the `GetCurrentTheme` method.
+- Created `StringsExtensions` helper on iOS to validate strings using regular expressions.
+- Created new class name `ScreenProtectionOptions` that will be used as parameter on the new unified api.
+
 ## 1.0.4-beta (07/12/2023)
 [Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.0.3-beta...v1.0.4-beta)
 
