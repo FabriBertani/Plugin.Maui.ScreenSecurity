@@ -6,6 +6,14 @@ namespace Plugin.Maui.ScreenSecurity;
 
 public interface IScreenSecurity
 {
+    void ActivateScreenSecurityProtection();
+
+    void ActivateScreenSecurityProtection(bool preventScreenshot, bool preventScreenRecording);
+
+    void ActivateScreenSecurityProtection(ScreenProtectionOptions screenProtectionOptions);
+
+    void DeactivateScreenSecurityProtection();
+
 #if ANDROID
     /// <summary>
     /// Prevent screen content from being exposed when the app

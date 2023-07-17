@@ -6,6 +6,26 @@ namespace Plugin.Maui.ScreenSecurity;
 
 partial class ScreenSecurityImplementation : IScreenSecurity
 {
+    public void ActivateScreenSecurityProtection()
+    {
+        SetScreenSecurityProtection(true);
+    }
+
+    public void ActivateScreenSecurityProtection(bool preventScreenshot, bool preventScreenRecording)
+    {
+        ActivateScreenSecurityProtection();
+    }
+
+    public void ActivateScreenSecurityProtection(ScreenProtectionOptions screenProtectionOptions)
+    {
+        ActivateScreenSecurityProtection();
+    }
+
+    public void DeactivateScreenSecurityProtection()
+    {
+        SetScreenSecurityProtection(false);
+    }
+
     /// <summary>
     /// Prevent screen content from being exposed when the app
     /// is sent to <b>Background</b> or the <b>Recents screen</b>.

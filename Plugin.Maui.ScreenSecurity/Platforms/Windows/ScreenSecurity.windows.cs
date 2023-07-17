@@ -10,6 +10,26 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     private const uint WDA_NONE = 0;
     private const uint WDA_MONITOR = 1;
 
+    public void ActivateScreenSecurityProtection()
+    {
+        SetScreenshotProtection(true);
+    }
+
+    public void ActivateScreenSecurityProtection(bool preventScreenshot, bool preventScreenRecording)
+    {
+        ActivateScreenSecurityProtection();
+    }
+
+    public void ActivateScreenSecurityProtection(ScreenProtectionOptions screenProtectionOptions)
+    {
+        ActivateScreenSecurityProtection();
+    }
+
+    public void DeactivateScreenSecurityProtection()
+    {
+        SetScreenshotProtection(false);
+    }
+
     /// <summary>
     /// Prevent screen content from being exposed when taking
     /// a <b><c>screenshot</c></b> by the system or any external app.
