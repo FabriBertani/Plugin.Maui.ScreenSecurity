@@ -2,7 +2,7 @@
 
 namespace Plugin.Maui.ScreenSecurity.Platforms.iOS;
 
-internal static class IOSWindowHelper
+internal static class IOSHelpers
 {
     internal static UIWindow? GetWindow()
     {
@@ -17,5 +17,11 @@ internal static class IOSWindowHelper
             return UIApplication.SharedApplication.Windows.FirstOrDefault(o => o.IsKeyWindow);
         else
             return UIApplication.SharedApplication.KeyWindow;
+    }
+
+    internal static ThemeStyle GetCurrentTheme()
+    {
+        return Application.Current?.RequestedTheme == AppTheme.Dark
+            ? ThemeStyle.Dark : ThemeStyle.Light;
     }
 }
