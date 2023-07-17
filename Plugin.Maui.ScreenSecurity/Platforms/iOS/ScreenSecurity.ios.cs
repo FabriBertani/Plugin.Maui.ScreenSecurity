@@ -5,7 +5,58 @@ namespace Plugin.Maui.ScreenSecurity;
 
 partial class ScreenSecurityImplementation : IScreenSecurity
 {
-    private readonly Lazy<UIWindow?> _window = new(IOSWindowHelper.GetWindow);
+    private readonly Lazy<UIWindow?> _window = new(IOSHelpers.GetWindow);
+
+    public void ActivateScreenSecurityProtection()
+    {
+        var style = IOSHelpers.GetCurrentTheme();
+
+        BlurProtectionManager.HandleBlurProtection(true, style, _window.Value);
+
+        HandleScreenCaptureProtection(true, true);
+    }
+
+    public void ActivateScreenSecurityProtection(bool preventScreenshot = true, bool preventScreenRecording = true)
+    {
+        BlurProtectionManager.HandleBlurProtection(true, IOSHelpers.GetCurrentTheme(), _window.Value);
+
+        HandleScreenCaptureProtection(preventScreenshot, preventScreenRecording);
+    }
+
+    public void ActivateScreenSecurityProtection(ScreenProtectionOptions screenProtectionOptions)
+    {
+        if (!string.IsNullOrEmpty(screenProtectionOptions.HexColor)
+            && string.IsNullOrEmpty(screenProtectionOptions.Image))
+        {
+            if (screenProtectionOptions.HexColor.IsHexColor())
+                ColorProtectionManager.HandleColorProtection(true, screenProtectionOptions.HexColor, _window.Value);
+            else
+                throw new ArgumentException($"{screenProtectionOptions.HexColor} is not a valid hexadecimal color.");
+        }
+        else if (!string.IsNullOrEmpty(screenProtectionOptions.Image)
+            && string.IsNullOrEmpty(screenProtectionOptions.HexColor))
+        {
+            if (screenProtectionOptions.Image.IsValidImage())
+                ImageProtectionManager.HandleImageProtection(true, screenProtectionOptions.Image, _window.Value);
+            else
+                throw new ArgumentException($"{screenProtectionOptions.Image} is not a valid image format.");
+        }
+
+        HandleScreenCaptureProtection(screenProtectionOptions.PreventScreenshot, screenProtectionOptions.PreventScreenRecording);
+    }
+
+    public void DeactivateScreenSecurityProtection()
+    {
+        BlurProtectionManager.HandleBlurProtection(false);
+
+        ColorProtectionManager.HandleColorProtection(false);
+
+        ImageProtectionManager.HandleImageProtection(false);
+
+        ScreenRecordingProtectionManager.HandleScreenRecordingProtection(false);
+
+        ScreenshotProtectionManager.HandleScreenshotProtection(false);
+    }
 
     /// <summary>
     /// Prevent screen content from being exposed by using a <b>Blur layer</b> when the app 
@@ -103,5 +154,12 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     public void DisableScreenshotProtection()
     {
         ScreenshotProtectionManager.HandleScreenshotProtection(false);
+    }
+
+    private void HandleScreenCaptureProtection(bool preventScreenshot, bool preventScreenRecording)
+    {
+        ScreenshotProtectionManager.HandleScreenshotProtection(preventScreenshot, _window.Value);
+
+        ScreenRecordingProtectionManager.HandleScreenRecordingProtection(preventScreenRecording, string.Empty, _window.Value);
     }
 }
