@@ -54,10 +54,12 @@ partial class ScreenSecurityImplementation : IScreenSecurity
 
                 if (activity != null)
                 {
+#if NET7_0
 #pragma warning disable CA1416
                     if (Build.VERSION.SdkInt >= BuildVersionCodes.Tiramisu)
                         activity.SetRecentsScreenshotEnabled(!enabled);
 #pragma warning restore CA1416
+#endif
 
                     if (enabled)
                         activity.Window?.SetFlags(WindowManagerFlags.Secure, WindowManagerFlags.Secure);
