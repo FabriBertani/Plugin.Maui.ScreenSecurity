@@ -48,7 +48,10 @@ internal class ScreenshotProtectionManager
                     if (preventScreenshot)
                         _secureTextField.SecureTextEntry = preventScreenshot;
                     else
+                    {
+                        _secureTextField.SecureTextEntry = false;
                         _secureTextField = null;
+                    }
                 }
             }
             catch (Exception ex)

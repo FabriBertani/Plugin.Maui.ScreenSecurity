@@ -5,7 +5,6 @@ namespace Plugin.Maui.ScreenSecurity.Platforms.iOS;
 
 internal class BlurProtectionManager
 {
-    //private static UIView? _screenBlur = null;
     private static UIVisualEffectView? _blurBackground = null;
 
     internal static void HandleBlurProtection(bool enabled, ThemeStyle? style = null, UIWindow? window = null)
