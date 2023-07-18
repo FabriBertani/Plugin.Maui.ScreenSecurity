@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.6-beta (07/18/2023)
+[Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.0.5-beta...v1.0.6-beta)
+
+**Fixed bugs:**
+- Blur screen protection not working properly due to interference with screenshot protection.
+- Failed to disable and re-enable the protections due to an iOS layer issue in the screenshot protection.
+
 ## 1.0.5-beta (07/17/2023)
 [Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.0.4-beta...v1.0.5-beta)
 
