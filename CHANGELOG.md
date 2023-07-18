@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.7-beta (07/18/2023)
+[Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.0.6-beta...v1.0.7-beta)
+
+**Implemented enhancements:**
+- Added .Net6 support to all platforms.
+
 ## 1.0.6-beta (07/18/2023)
 [Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.0.5-beta...v1.0.6-beta)
 
