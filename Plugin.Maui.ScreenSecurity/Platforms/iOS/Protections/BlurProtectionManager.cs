@@ -5,7 +5,8 @@ namespace Plugin.Maui.ScreenSecurity.Platforms.iOS;
 
 internal class BlurProtectionManager
 {
-    private static UIView? _screenBlur = null;
+    //private static UIView? _screenBlur = null;
+    private static UIVisualEffectView? _blurBackground = null;
 
     internal static void HandleBlurProtection(bool enabled, ThemeStyle? style = null, UIWindow? window = null)
     {
@@ -63,28 +64,29 @@ internal class BlurProtectionManager
 
     private static void EnableBlurScreenProtection(UIWindow? window = null, ThemeStyle? style = null)
     {
-        _screenBlur = UIScreen.MainScreen.SnapshotView(false);
-
-        var blurEffectStyle = style == ThemeStyle.Light
-            ? UIBlurEffectStyle.Light
-            : UIBlurEffectStyle.Dark;
-
-        using var blurEffect = UIBlurEffect.FromStyle(blurEffectStyle);
-        using var blurBackground = new UIVisualEffectView(blurEffect);
-        if (_screenBlur != null)
+        if (window != null)
         {
-            _screenBlur.AddSubview(blurBackground);
+            var blurEffectStyle = style switch
+            {
+                ThemeStyle.Light => UIBlurEffectStyle.Light,
+                _ => UIBlurEffectStyle.Dark
+            };
 
-            blurBackground.Frame = _screenBlur.Frame;
+            using var blurEffect = UIBlurEffect.FromStyle(blurEffectStyle);
 
-            window?.AddSubview(_screenBlur);
+            _blurBackground = new UIVisualEffectView(blurEffect)
+            {
+                Frame = window.Frame
+            };
+        
+            window.AddSubview(_blurBackground);
         }
     }
 
     private static void DisableBlurScreenProtection()
     {
-        _screenBlur?.RemoveFromSuperview();
+        _blurBackground?.RemoveFromSuperview();
 
-        _screenBlur = null;
+        _blurBackground = null;
     }
 }
