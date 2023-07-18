@@ -45,16 +45,19 @@ internal class ImageProtectionManager
 
             if (!string.IsNullOrEmpty(image))
             {
-                using var uiImage = new UIImage(image);
-                _screenImage = new UIImageView(UIScreen.MainScreen.Bounds)
+                if (File.Exists(image))
                 {
-                    Image = uiImage,
-                    UserInteractionEnabled = false,
-                    ContentMode = UIViewContentMode.ScaleAspectFill,
-                    ClipsToBounds = true
-                };
+                    using var uiImage = new UIImage(image);
+                    _screenImage = new UIImageView(UIScreen.MainScreen.Bounds)
+                    {
+                        Image = uiImage,
+                        UserInteractionEnabled = false,
+                        ContentMode = UIViewContentMode.ScaleAspectFill,
+                        ClipsToBounds = true
+                    };
 
-                window.AddSubview(_screenImage);
+                    window.AddSubview(_screenImage);
+                }
             }
         }
     }

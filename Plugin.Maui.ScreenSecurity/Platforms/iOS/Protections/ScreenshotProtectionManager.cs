@@ -6,10 +6,7 @@ namespace Plugin.Maui.ScreenSecurity.Platforms.iOS;
 
 internal class ScreenshotProtectionManager
 {
-    private static readonly UITextField _secureTextField = new()
-    {
-        UserInteractionEnabled = false
-    };
+    private static UITextField? _secureTextField = null;
 
     internal static void HandleScreenshotProtection(bool enabled, UIWindow? window = null)
     {
@@ -31,6 +28,11 @@ internal class ScreenshotProtectionManager
             {
                 if (window != null)
                 {
+                    _secureTextField ??= new()
+                    {
+                        UserInteractionEnabled = false
+                    };
+
                     UIViewController? rootViewController = GetRootPresentedViewController(window);
 
                     rootViewController?.View?.AddSubview(_secureTextField);
@@ -41,7 +43,13 @@ internal class ScreenshotProtectionManager
                     _secureTextField.Layer.Sublayers?[0].AddSublayer(window.Layer);
                 }
 
-                _secureTextField.SecureTextEntry = preventScreenshot;
+                if (_secureTextField != null)
+                {
+                    if (preventScreenshot)
+                        _secureTextField.SecureTextEntry = preventScreenshot;
+                    else
+                        _secureTextField = null;
+                }
             }
             catch (Exception ex)
             {
