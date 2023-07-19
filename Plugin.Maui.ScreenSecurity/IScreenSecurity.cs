@@ -8,7 +8,7 @@ public interface IScreenSecurity
 {
     void ActivateScreenSecurityProtection();
 
-    void ActivateScreenSecurityProtection(bool preventScreenshot, bool preventScreenRecording);
+    void ActivateScreenSecurityProtection(bool blurScreenProtection, bool preventScreenshot, bool preventScreenRecording);
 
     void ActivateScreenSecurityProtection(ScreenProtectionOptions screenProtectionOptions);
 

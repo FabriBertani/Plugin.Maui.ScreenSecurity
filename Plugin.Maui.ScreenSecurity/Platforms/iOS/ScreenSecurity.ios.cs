@@ -9,16 +9,15 @@ partial class ScreenSecurityImplementation : IScreenSecurity
 
     public void ActivateScreenSecurityProtection()
     {
-        var style = IOSHelpers.GetCurrentTheme();
-
-        BlurProtectionManager.HandleBlurProtection(true, style, _window.Value);
+        BlurProtectionManager.HandleBlurProtection(true, IOSHelpers.GetCurrentTheme(), _window.Value);
 
         HandleScreenCaptureProtection(true, true);
     }
 
-    public void ActivateScreenSecurityProtection(bool preventScreenshot = true, bool preventScreenRecording = true)
+    public void ActivateScreenSecurityProtection(bool blurScreenProtection = true, bool preventScreenshot = true, bool preventScreenRecording = true)
     {
-        BlurProtectionManager.HandleBlurProtection(true, IOSHelpers.GetCurrentTheme(), _window.Value);
+        if (blurScreenProtection)
+            BlurProtectionManager.HandleBlurProtection(true, IOSHelpers.GetCurrentTheme(), _window.Value);
 
         HandleScreenCaptureProtection(preventScreenshot, preventScreenRecording);
     }

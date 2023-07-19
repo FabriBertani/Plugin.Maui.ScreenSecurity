@@ -15,7 +15,7 @@ partial class ScreenSecurityImplementation : IScreenSecurity
         SetScreenshotProtection(true);
     }
 
-    public void ActivateScreenSecurityProtection(bool preventScreenshot, bool preventScreenRecording)
+    public void ActivateScreenSecurityProtection(bool blurScreenProtection, bool preventScreenshot, bool preventScreenRecording)
     {
         ActivateScreenSecurityProtection();
     }
