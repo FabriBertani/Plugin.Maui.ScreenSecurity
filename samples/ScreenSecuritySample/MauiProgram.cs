@@ -32,6 +32,9 @@ public static class MauiProgram
         // Register Windows Pages
         builder.Services.AddScoped<ScreenshotProtectionPage>();
 
+        // Register Main Page
+        builder.Services.AddScoped<MainPage>();
+
         // Register plugin as Singleton
         builder.Services.AddSingleton<IScreenSecurity>(ScreenSecurity.Default);
 
