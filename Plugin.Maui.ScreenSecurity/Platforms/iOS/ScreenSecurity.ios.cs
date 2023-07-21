@@ -7,6 +7,11 @@ partial class ScreenSecurityImplementation : IScreenSecurity
 {
     private readonly Lazy<UIWindow?> _window = new(IOSHelpers.GetWindow);
 
+    /// <summary>
+    /// Activates the screen security protection when the app is sent
+    /// to <b>Recents screen</b> or the <b>App Switcher</b>.
+    /// Also prevents app <b>screenshots</b> or <b>recording</b> to be taken.
+    /// </summary>
     public void ActivateScreenSecurityProtection()
     {
         BlurProtectionManager.HandleBlurProtection(true, IOSHelpers.GetCurrentTheme(), _window.Value);
@@ -14,6 +19,18 @@ partial class ScreenSecurityImplementation : IScreenSecurity
         HandleScreenCaptureProtection(true, true);
     }
 
+    /// <summary>
+    /// Activates the screen security protection when the app is sent
+    /// to <b>Recents screen</b> or the <b>App Switcher</b>.
+    /// Also prevents app <b>screenshots</b> or <b>recording</b> to be taken.
+    /// The specified parameters are for <b>iOS</b> only.
+    /// </summary>
+    /// <param name="blurScreenProtection">A boolean value indicates whether to blur the screen.</param>
+    /// <param name="preventScreenshot">A boolean value that indicates whether to prevent screenshots.</param>
+    /// <param name="preventScreenRecording">A boolean value that indicates whether to prevent screen recording.</param>
+    /// <remarks>
+    /// These parameters have <u><b>no effect</b></u> on <b>Android</b> and <b>Windows</b> platforms.
+    /// </remarks>
     public void ActivateScreenSecurityProtection(bool blurScreenProtection = true, bool preventScreenshot = true, bool preventScreenRecording = true)
     {
         if (blurScreenProtection)
@@ -22,6 +39,19 @@ partial class ScreenSecurityImplementation : IScreenSecurity
         HandleScreenCaptureProtection(preventScreenshot, preventScreenRecording);
     }
 
+    /// <summary>
+    /// Activates the screen security protection when the app is sent
+    /// to <b>Recents screen</b> or the <b>App Switcher</b>.
+    /// Also prevents app <b>screenshots</b> or <b>recording</b> to be taken.
+    /// The specified parameters are for using a <u>Color</u> or an <u>Image</u> as protection on iOS only.
+    /// </summary>
+    /// <param name="screenProtectionOptions">
+    /// ScreenProtectionOptions contains extra options for screen security protection,
+    /// in order to customize the screen protection by specifying either a <b>Color</b> or an <b>Image</b> for iOS devices.
+    /// </param>
+    /// <remarks>
+    /// These parameters have <u><b>no effect</b></u> on <b>Android</b> and <b>Windows</b> platforms.
+    /// </remarks>
     public void ActivateScreenSecurityProtection(ScreenProtectionOptions screenProtectionOptions)
     {
         if (!string.IsNullOrEmpty(screenProtectionOptions.HexColor)
@@ -44,6 +74,9 @@ partial class ScreenSecurityImplementation : IScreenSecurity
         HandleScreenCaptureProtection(screenProtectionOptions.PreventScreenshot, screenProtectionOptions.PreventScreenRecording);
     }
 
+    /// <summary>
+    /// Deactivates all screen security protection.
+    /// </summary>
     public void DeactivateScreenSecurityProtection()
     {
         BlurProtectionManager.HandleBlurProtection(false);
