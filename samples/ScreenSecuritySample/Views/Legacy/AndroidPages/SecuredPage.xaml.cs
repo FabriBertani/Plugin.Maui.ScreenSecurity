@@ -17,6 +17,8 @@ public partial class SecuredPage : ContentPage
     {
         base.OnAppearing();
 
+        _screenSecurity.ActivateScreenSecurityProtection();
+
 #if ANDROID
         _screenSecurity.EnableScreenSecurityProtection();
 #endif

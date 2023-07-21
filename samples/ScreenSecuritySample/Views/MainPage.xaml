@@ -9,57 +9,11 @@
         HorizontalScrollBarVisibility="Never">
         <VerticalStackLayout
             VerticalOptions="Center">
-            <VerticalStackLayout
-                IsVisible="{x:OnPlatform Android='True', iOS='False', WinUI='False'}">
-                <Button
-                    Margin="16"
-                    HorizontalOptions="FillAndExpand"
-                    Text="OPEN SECURITY SCREEN TEST PAGE"
-                    Clicked="OpenSecurityScreenTestPage_Clicked" />
-                <Button
-                    Margin="16"
-                    HorizontalOptions="FillAndExpand"
-                    Text="OPEN SECURED PAGE"
-                    Clicked="OpenSecuredPage_Clicked" />
-            </VerticalStackLayout>
-            <VerticalStackLayout
-                VerticalOptions="Center"
-                IsVisible="{x:OnPlatform Android='False', WinUI='False', iOS='True'}">
-                <Button
-                    Margin="16"
-                    HorizontalOptions="FillAndExpand"
-                    Text="OPEN BLUR PROTECTION PAGE"
-                    Clicked="OpenBlurProtectionPage_Clicked" />
-                <Button
-                    Margin="16"
-                    HorizontalOptions="FillAndExpand"
-                    Text="OPEN COLOR PROTECTION PAGE"
-                    Clicked="OpenColorProtectionPage_Clicked" />
-                <Button
-                    Margin="16"
-                    HorizontalOptions="FillAndExpand"
-                    Text="OPEN IMAGE PROTECTION PAGE"
-                    Clicked="OpenImageProtectionPage_Clicked" />
-                <Button
-                    Margin="16"
-                    HorizontalOptions="FillAndExpand"
-                    Text="OPEN RECORDING PROTECTION PAGE"
-                    Clicked="OpenRecordingProtectionPage_Clicked" />
-                <Button
-                    Margin="16"
-                    HorizontalOptions="FillAndExpand"
-                    Text="OPEN SCREENSHOT PROTECTION PAGE"
-                    Clicked="OpenIOSScreenshotProtectionPage_Clicked" />
-            </VerticalStackLayout>
-            <VerticalStackLayout
-                VerticalOptions="Center"
-                IsVisible="{x:OnPlatform Android='False', iOS='False', WinUI='True'}">
-                <Button
-                    Margin="16"
-                    HorizontalOptions="FillAndExpand"
-                    Text="OPEN SCREENSHOT PROTECTION PAGE"
-                    Clicked="OpenScreenshotProtectionPage_Clicked" />
-            </VerticalStackLayout>
+            <Label 
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center"
+                FontSize="Large"
+                Text="This page is protected against content exposure." />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

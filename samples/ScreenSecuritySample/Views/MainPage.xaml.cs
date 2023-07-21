@@ -1,56 +1,52 @@
-﻿namespace ScreenSecuritySample.Views;
+﻿using Plugin.Maui.ScreenSecurity;
+
+namespace ScreenSecuritySample.Views;
 
 public partial class MainPage : ContentPage
 {
-    public MainPage()
+    private readonly IScreenSecurity _screenSecurity;
+
+    public MainPage(IScreenSecurity screenSecurity)
     {
         InitializeComponent();
+
+        _screenSecurity = screenSecurity;
     }
 
-    private void OpenSecurityScreenTestPage_Clicked(object sender, EventArgs e)
+    protected override void OnAppearing()
     {
-        Navigate("security_screen_test");
+        base.OnAppearing();
+
+        // Activate the screen security protection with default settings
+        _screenSecurity.ActivateScreenSecurityProtection();
+
+        /*
+        // For changing iOS options, follow one of the next examples:
+
+        // Example 1: Customize with a specific color
+        var screenProtectionOptions = new ScreenProtectionOptions
+        {
+            HexColor = "#6C4675",
+            PreventScreenshot = true,
+            PreventScreenRecording = false
+        };
+
+        // Example 2: Customize with an image
+        var screenProtectionOptions = new ScreenProtectionOptions
+        {
+            Image = "protection_bg.png"
+            PreventScreenshot = false,
+            PreventScreenRecording = true
+        };
+
+        _screenSecurity.ActivateScreenSecurityProtection(screenProtectionOptions);
+        */
     }
 
-    private void OpenSecuredPage_Clicked(object sender, EventArgs e)
+    protected override void OnDisappearing()
     {
-        Navigate("secured");
-    }
+        _screenSecurity.DeactivateScreenSecurityProtection();
 
-    private void OpenBlurProtectionPage_Clicked(object sender, EventArgs e)
-    {
-        Navigate("blur_protection");        
-    }
-
-    private void OpenColorProtectionPage_Clicked(object sender, EventArgs e)
-    {
-        Navigate("color_protection");
-    }
-
-    private void OpenImageProtectionPage_Clicked(object sender, EventArgs e)
-    {
-        Navigate("image_protection");
-    }
-
-    private void OpenRecordingProtectionPage_Clicked(object sender, EventArgs e)
-    {
-        Navigate("recording_protection");
-    }
-
-    private void OpenScreenshotProtectionPage_Clicked(object sender, EventArgs e)
-    {
-        Navigate("screenshot_protection");
-    }
-
-    private void OpenIOSScreenshotProtectionPage_Clicked(object sender, EventArgs e)
-    {
-        Navigate("ios_screenshot_protection");
-    }
-
-    private static void Navigate(string to)
-    {
-        MainThread.InvokeOnMainThreadAsync(async () =>
-            await Shell.Current.GoToAsync(to)
-        );
+        base.OnDisappearing();
     }
 }
