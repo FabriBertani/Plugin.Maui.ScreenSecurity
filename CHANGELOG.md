@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.1.0 (07/21/2023)
+[Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.0.0...v1.1.0)
+
+**Breaking changes:**
+- All methods from the previous version **were marked obsolete** and will be removed in the next stable release.
+
+**Implemented enhancements:**
+- Added Windows support.
+- Added screenshot prevention for iOS.
+- Added unified endpoints to be used on all platforms without preprocessing directives.
+- Added .Net6 support to all platforms.
+
+**Fixed bugs:**
+- Fixed Android thread exception: [#6 Exception: Only the original thread that created a view hierarchy can touch its views](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/issues/6)
+- Blur screen protection not working properly due to interference with screenshot protection.
+- Failed to disable and re-enable the protections due to an iOS layer issue in the screenshot protection.
+
 ## 1.0.7-beta (07/18/2023)
 [Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.0.6-beta...v1.0.7-beta)
 
