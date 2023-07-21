@@ -54,12 +54,14 @@ public interface IScreenSecurity
     /// Also prevents app <b>screenshots</b> or <b>recording</b> to be taken.
     /// </summary>
     /// <remarks>Supported for <b><c>Android</c></b> only.</remarks>
+    [Obsolete($"This method will be removed in the next stable version. Use {nameof(ActivateScreenSecurityProtection)} instead.", false)]
     void EnableScreenSecurityProtection();
 
     /// <summary>
     /// Re-enables screen content exposure.
     /// </summary>
     /// <remarks>Supported for <b><c>Android</c></b> only.</remarks>
+    [Obsolete($"This method will be removed in the next stable version. Use {nameof(DeactivateScreenSecurityProtection)} instead.", false)]
     void DisableScreenSecurityProtection();
 #elif IOS
     /// <summary>
@@ -72,12 +74,14 @@ public interface IScreenSecurity
     /// <b><c>Light</c></b> by default.
     /// </param>
     /// <remarks>Supported for <b><c>iOS</c></b> only.</remarks>
+    [Obsolete($"This method will be removed in the next stable version. Use {nameof(ActivateScreenSecurityProtection)} instead.", false)]
     void EnableBlurScreenProtection(ThemeStyle style);
 
     /// <summary>
     /// Removes the <b>Blur layer</b> and re-enables screen content exposure.
     /// </summary>
     /// <remarks>Supported for <b><c>iOS</c></b> only.</remarks>
+    [Obsolete($"This method will be removed in the next stable version. Use {nameof(DeactivateScreenSecurityProtection)} instead.", false)]
     void DisableBlurScreenProtection();
 
     /// <summary>
@@ -89,12 +93,15 @@ public interface IScreenSecurity
     /// <b><c>#RGB</c></b>, <b><c>#RGBA</c></b>, <b><c>#RRGGBB</c></b> or <b><c>#RRGGBBAA</c></b>.
     /// <b>#FFFFFF</b> by default.</param>
     /// <remarks>Supported for <b><c>iOS</c></b> only.</remarks>
+    [Obsolete("This method will be removed in the next stable version. " +
+        "Use ActivateScreenSecurityProtection(ScreenProtectionOptions screenProtectionOptions) instead.", false)]
     void EnableColorScreenProtection(string hexColor);
 
     /// <summary>
     /// Removes the <b>Color layer</b> and re-enables screen content exposure.
     /// </summary>
     /// <remarks>Supported for <b><c>iOS</c></b> only.</remarks>
+    [Obsolete($"This method will be removed in the next stable version. Use {nameof(DeactivateScreenSecurityProtection)} instead.", false)]
     void DisableColorScreenProtection();
 
     /// <summary>
@@ -104,12 +111,15 @@ public interface IScreenSecurity
     /// </summary>
     /// <param name="image">Name with extension of the image to use.</param>
     /// <remarks>Supported for <b><c>iOS</c></b> only.</remarks>
+    [Obsolete("This method will be removed in the next stable version. " +
+        "Use ActivateScreenSecurityProtection(ScreenProtectionOptions screenProtectionOptions) instead.", false)]
     void EnableImageScreenProtection(string image);
 
     /// <summary>
     /// Removes the <b>Image</b> and re-enables screen content exposure.
     /// </summary>
     /// <remarks>Supported for <b><c>iOS</c></b> only.</remarks>
+    [Obsolete($"This method will be removed in the next stable version. Use {nameof(DeactivateScreenSecurityProtection)} instead.", false)]
     void DisableImageScreenProtection();
 
     /// <summary>
@@ -123,12 +133,15 @@ public interface IScreenSecurity
     /// <param name="withBlur">Set it to <b><c>false</c></b> to deactivate screen protection with Blur. 
     /// It can be mixed with <paramref name="withColor"/>. <b><c>True</c> by default.</b></param>
     /// <remarks>Supported for <b><c>iOS</c></b> only.</remarks>
+    [Obsolete("This method will be removed in the next stable version. " +
+        "Use ActivateScreenSecurityProtection(bool preventScreenshot, bool preventScreenRecording) instead.", false)]
     void EnableScreenRecordingProtection(string withColor = "", bool withBlur = true);
 
     /// <summary>
     /// Turn off the screen recording protection.
     /// </summary>
     /// <remarks>Supported for <b><c>iOS</c></b> only.</remarks>
+    [Obsolete($"This method will be removed in the next stable version. Use {nameof(DeactivateScreenSecurityProtection)} instead.", false)]
     void DisableScreenRecordingProtection();
 
     /// <summary>
@@ -136,12 +149,15 @@ public interface IScreenSecurity
     /// by placing a black screen.
     /// </summary>
     /// <remarks>Supported for <b><c>iOS</c></b> only.</remarks>
+    [Obsolete("This method will be removed in the next stable version. " +
+        "Use ActivateScreenSecurityProtection(bool preventScreenshot, bool preventScreenRecording) instead.", false)]
     void EnableScreenshotProtection();
 
     /// <summary>
     /// Turn off the screenshot protection.
     /// </summary>
     /// <remarks>Supported for <b><c>iOS</c></b> only.</remarks>
+    [Obsolete($"This method will be removed in the next stable version. Use {nameof(DeactivateScreenSecurityProtection)} instead.", false)]
     void DisableScreenshotProtection();
 #elif WINDOWS
     /// <summary>
@@ -149,12 +165,14 @@ public interface IScreenSecurity
     /// a <b><c>screenshot</c></b> by the system or any external app.
     /// </summary>
     /// <remarks>Supported for <b><c>Windows</c></b> only.</remarks>
+    [Obsolete($"This method will be removed in the next stable version. Use {nameof(ActivateScreenSecurityProtection)} instead.", false)]
     void EnableScreenshotProtection();
 
     /// <summary>
     /// Re-enables content exposure when taking a screenshot.
     /// </summary>
     /// <remarks>Supported for <b><c>Windows</c></b> only.</remarks>
+    [Obsolete($"This method will be removed in the next stable version. Use {nameof(DeactivateScreenSecurityProtection)} instead.", false)]
     void DisableScreenshotProtection();
 #endif
 }
