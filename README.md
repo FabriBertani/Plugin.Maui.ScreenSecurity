@@ -10,18 +10,13 @@
 |.Net MAUI iOS|iOS 14+|
 |Windows|10.0.17763+|
 
-## Version 1.1.0
-> :warning: All methods from the previous version **were marked obsolete** and will be removed in the next stable release.
+## Version 1.1.5
+> :warning: All methods **marked as obsolete** were removed.
 
 ### What's new?
-- Added **Windows** support. :exclamation:
-- Added **screenshot protection** for _iOS_.
-- Implemented a new unified API. :exclamation: (See [Api Usage](#api-usage))
-- Added support for .Net6.
-- Bugs and issues fixed.
-- Several code improvements.
+- Added .net6 and .net7 targets.
 
-Click [here](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/releases/tag/v1.1.0) to see the full Changelog!
+Click [here](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/releases/tag/v1.1.5) to see the full Changelog!
 
 ## Installation
 `Plugin.Maui.ScreenSecurity` is available via NuGet, grab the latest package and install it on your solution:

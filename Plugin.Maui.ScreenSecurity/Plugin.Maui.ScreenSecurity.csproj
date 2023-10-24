@@ -21,14 +21,14 @@
 		<RepositoryUrl>https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>dotnet-maui;maui;toolkit;security;Plugin.Maui.ScreenSecurity;ScreenSecurity;screen;protection;leak;android;ios</PackageTags>
-		<AssemblyVersion>1.1.0</AssemblyVersion>
-		<FileVersion>1.1.0</FileVersion>
+		<AssemblyVersion>1.1.5</AssemblyVersion>
+		<FileVersion>1.1.5</FileVersion>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<NeutralLanguage>en</NeutralLanguage>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageIcon>plugin.maui.screensecurity_128x128.jpg</PackageIcon>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<Version>1.1.0</Version>
+		<Version>1.1.5</Version>
 		<PackageReleaseNotes>https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/blob/main/CHANGELOG.md</PackageReleaseNotes>
 		<IncludeSymbols>True</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
