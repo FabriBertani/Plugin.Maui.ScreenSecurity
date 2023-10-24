@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.5 (10/24/2023)
+[Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.1.0...v1.1.5)
+
+**Breaking changes:**
+- All methods **marked as obsolete** were removed.
+
+**Implemented enhancements:**
+- Added .net6 and .net7 targets.
+
 ## 1.1.0 (07/21/2023)
 [Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.0.0...v1.1.0)
 
