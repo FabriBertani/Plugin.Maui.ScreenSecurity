@@ -59,24 +59,6 @@ partial class ScreenSecurityImplementation : IScreenSecurity
         SetScreenSecurityProtection(false);
     }
 
-    /// <summary>
-    /// Prevent screen content from being exposed when the app
-    /// is sent to <b>Background</b> or the <b>Recents screen</b>.
-    /// Also prevents app <b>screenshots</b> or <b>recording</b> to be taken.
-    /// </summary>
-    public void EnableScreenSecurityProtection()
-    {
-        SetScreenSecurityProtection(true);
-    }
-
-    /// <summary>
-    /// Re-enables screen content exposure.
-    /// </summary>
-    public void DisableScreenSecurityProtection()
-    {
-        SetScreenSecurityProtection(false);
-    }
-
     private void SetScreenSecurityProtection(bool enabled)
     {
         MainThread.BeginInvokeOnMainThread(() =>
