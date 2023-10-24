@@ -63,23 +63,6 @@ partial class ScreenSecurityImplementation : IScreenSecurity
         SetScreenshotProtection(false);
     }
 
-    /// <summary>
-    /// Prevent screen content from being exposed when taking
-    /// a <b><c>screenshot</c></b> by the system or any external app.
-    /// </summary>
-    public void EnableScreenshotProtection()
-    {
-        SetScreenshotProtection(true);
-    }
-
-    /// <summary>
-    /// Re-enables content exposure when taking a screenshot.
-    /// </summary>
-    public void DisableScreenshotProtection()
-    {
-        SetScreenshotProtection(false);
-    }
-
     private void SetScreenshotProtection(bool enabled)
     {
         try
