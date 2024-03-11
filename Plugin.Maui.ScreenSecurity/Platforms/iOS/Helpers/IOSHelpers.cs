@@ -8,19 +8,13 @@ internal static class IOSHelpers
     {
         if (UIDevice.CurrentDevice.CheckSystemVersion(16, 0))
         {
-            var windowScene =  UIApplication.SharedApplication.ConnectedScenes
+            var windowScene = UIApplication.SharedApplication.ConnectedScenes
                 .OfType<UIWindowScene>()
                 .FirstOrDefault();
 
-            var window = windowScene.KeyWindow;
-            if (window == null)
-            {
-                window = windowScene.Windows.FirstOrDefault(w => w.IsKeyWindow);
-            }
-            if (window == null)
-            {
-                window = windowScene.Windows.FirstOrDefault();
-            }
+            var window = windowScene?.KeyWindow
+                ?? windowScene?.Windows?.FirstOrDefault(w => w.IsKeyWindow)
+                ?? windowScene?.Windows?.FirstOrDefault();
 
             return window;
         }
