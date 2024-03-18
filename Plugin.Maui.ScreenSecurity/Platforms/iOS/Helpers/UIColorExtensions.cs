@@ -47,7 +47,7 @@ internal static class UIColorExtensions
                 return UIColor.FromRGBA(red, green, blue, alpha);
 
             default:
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(hexValue));
         }
     }
 }

@@ -6,7 +6,7 @@ internal static class ErrorsHandler
     {
         Console.WriteLine($"{methodName} failed with Exception message: {ex.Message}");
         Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
-        if (ex.InnerException != null)
+        if (ex.InnerException is not null)
             Console.WriteLine($"With InnerException: {ex.InnerException}");
     }
 }
