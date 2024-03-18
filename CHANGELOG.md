@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.6 (03/18/2024)
+[Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.1.5...v1.1.6)
+
+**Implemented enhancements:**
+- Removed .Net6 and added .Net8 support to all platforms.
+- Added general code improvements.
+
+**Fixed bugs:**
+- Merged [#22: iOS 17 fix](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/pull/22) PR by [Gogzs](https://github.com/Gogzs).
+- Fixed screenshot not working on iOS 17+ issue, by changing the screenshot protection implementation, now a blank white or black (depending on the current OS theme) is added before taking the screenshot to cover the screen content.
+
 ## 1.1.5 (10/24/2023)
 [Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.1.0...v1.1.5)
 

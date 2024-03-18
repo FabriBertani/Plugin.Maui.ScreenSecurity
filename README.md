@@ -10,13 +10,15 @@
 |.Net MAUI iOS|iOS 14+|
 |Windows|10.0.17763+|
 
-## Version 1.1.5
-> :warning: All methods **marked as obsolete** were removed.
+## Version 1.1.6
 
 ### What's new?
-- Added .net6 and .net7 targets.
+- Removed .Net6 support. :warning:
+- Added .Net8 support to all platforms.
+- Fixed iOS 17 issues.
+- Fixed screenshot not working on iOS 17+ issue, by changing the screenshot protection implementation, now a blank white or black (depending on the current OS theme) is added before taking the screenshot to cover the screen content. :exclamation:
 
-Click [here](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/releases/tag/v1.1.5) to see the full Changelog!
+Click [here](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/releases/tag/v1.1.6) to see the full Changelog!
 
 ## Installation
 `Plugin.Maui.ScreenSecurity` is available via NuGet, grab the latest package and install it on your solution:
@@ -148,3 +150,7 @@ Please feel free to open an [Issue](https://github.com/FabriBertani/Plugin.Maui.
 
 ## License
 The Plugin.Maui.ScreenSecurity is licensed under [MIT](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/blob/main/LICENSE).
+
+## Contributors
+
+* **[Goran Karacic](https://github.com/Gogzs)** for the iOS 17 fix.
