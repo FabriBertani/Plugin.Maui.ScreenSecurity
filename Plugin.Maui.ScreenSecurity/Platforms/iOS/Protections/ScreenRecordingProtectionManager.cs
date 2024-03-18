@@ -11,26 +11,44 @@ internal class ScreenRecordingProtectionManager
         {
             try
             {
+#if NET8_0
+                if (UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
+                {
+                    if (UITraitCollection.CurrentTraitCollection.SceneCaptureState == UISceneCaptureState.Active)
+                    {
+                        if (enabled)
+                            EnableScreenRecordingProtection(withColor, window);
+                        else
+                            DisableScreenRecordingProtection();
+                    }
+                }
+                else
+                    DisableScreenRecordingProtection();
+#elif NET7_0
                 if (UIScreen.MainScreen.Captured)
                 {
                     if (enabled)
-                    {
-                        if (!string.IsNullOrEmpty(withColor))
-                            ColorProtectionManager.EnableColor(window, withColor);
-                        else
-                            BlurProtectionManager.EnableBlur(window, ThemeStyle.Light);
-                    }
+                        EnableScreenRecordingProtection(withColor, window);
                     else
                         DisableScreenRecordingProtection();
                 }
                 else
                     DisableScreenRecordingProtection();
+#endif
             }
             catch (Exception ex)
             {
                 ErrorsHandler.HandleException(nameof(HandleScreenRecordingProtection), ex);
             }
         });
+    }
+
+    private static void EnableScreenRecordingProtection(string withColor = "", UIWindow? window = null)
+    {
+        if (!string.IsNullOrEmpty(withColor))
+            ColorProtectionManager.EnableColor(window, withColor);
+        else
+            BlurProtectionManager.EnableBlur(window, ThemeStyle.Light);
     }
 
     private static void DisableScreenRecordingProtection()
