@@ -20,6 +20,7 @@ public static class MauiProgram
 
         // Register Main Page
         builder.Services.AddScoped<MainPage>();
+        builder.Services.AddScoped<SecondPage>();
 
         // Register plugin as Singleton
         builder.Services.AddSingleton<IScreenSecurity>(ScreenSecurity.Default);

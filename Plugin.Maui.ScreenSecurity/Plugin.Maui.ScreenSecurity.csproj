@@ -44,6 +44,16 @@
         <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Platforms\iOS\black_bg.png" />
+      <None Remove="Platforms\iOS\white_bg.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <MauiImage Include="Platforms\iOS\black_bg.png" />
+      <MauiImage Include="Platforms\iOS\white_bg.png" />
+    </ItemGroup>
+
 	<ItemGroup>
 	  <None Include="..\Assets\plugin.maui.screensecurity_128x128.jpg">
 	    <Pack>True</Pack>

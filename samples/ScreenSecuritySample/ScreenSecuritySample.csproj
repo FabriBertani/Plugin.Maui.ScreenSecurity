@@ -62,6 +62,9 @@
 	  <MauiXaml Update="Platforms\Windows\App.xaml">
 	    <Generator></Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\SecondPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>

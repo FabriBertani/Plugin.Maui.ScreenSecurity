@@ -1,23 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="ScreenSecuritySample.Views.MainPage">
+    x:Class="ScreenSecuritySample.Views.SecondPage"
+    Title="Unprotected Page">
     <ScrollView
         Padding="16, 0"
         HorizontalScrollBarVisibility="Never">
         <VerticalStackLayout
             VerticalOptions="Center"
             Spacing="25">
-            <Label 
+            <Label
                 HorizontalTextAlignment="Center"
                 VerticalTextAlignment="Center"
                 FontSize="Large"
-                Text="This page is protected against content exposure." />
+                Text="This page is NOT protected against content exposure." />
             <Button
                 CornerRadius="15"
                 FontSize="Large"
-                Text="Navigate to unprotected page"
+                Text="Return to protected page"
                 Clicked="Button_Clicked" />
         </VerticalStackLayout>
     </ScrollView>

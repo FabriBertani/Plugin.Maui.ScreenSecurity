@@ -1,4 +1,5 @@
 ﻿using CoreFoundation;
+using CoreGraphics;
 using Plugin.Maui.ScreenSecurity.Handlers;
 using UIKit;
 
@@ -7,6 +8,8 @@ namespace Plugin.Maui.ScreenSecurity.Platforms.iOS;
 internal class ScreenshotProtectionManager
 {
     private static UITextField? _secureTextField = null;
+    private static UIView? _view = null;
+    private static UIImageView? _imageView = null;
 
     internal static void HandleScreenshotProtection(bool enabled, UIWindow? window = null)
     {
@@ -26,31 +29,46 @@ internal class ScreenshotProtectionManager
         {
             try
             {
-                if (window is not null)
+                if (preventScreenshot)
                 {
-                    _secureTextField ??= new()
+                    if (window is not null)
                     {
-                        UserInteractionEnabled = false
-                    };
+                        _secureTextField = new();
 
-                    UIViewController? rootViewController = GetRootPresentedViewController(window);
+                        _view = new(new CGRect(x: 0, y: 0, width: _secureTextField.Frame.Width, height: _secureTextField.Frame.Height));
 
-                    rootViewController?.View?.AddSubview(_secureTextField);
-                    window.MakeKeyAndVisible();
+                        _imageView = new(new UIImage(IOSHelpers.GetCurrentTheme() == ThemeStyle.Light ? "white_bg.png" : "black_bg.png"))
+                        {
+                            Frame = new CGRect(x: 0, y: 0, width: UIScreen.MainScreen.Bounds.Width, height: UIScreen.MainScreen.Bounds.Height)
+                        };
 
-                    window.Layer.SuperLayer?.AddSublayer(_secureTextField.Layer);
+                        _secureTextField.SecureTextEntry = true;
 
-                    _secureTextField.Layer.Sublayers?[0].AddSublayer(window.Layer);
+                        window.AddSubview(_secureTextField);
+                        _view.AddSubview(_imageView);
+
+                        window.Layer.SuperLayer?.AddSublayer(_secureTextField.Layer);
+                        _secureTextField.Layer.Sublayers?.Last().AddSublayer(window.Layer);
+
+                        _secureTextField.LeftView = _view;
+                        _secureTextField.LeftViewMode = UITextFieldViewMode.Always;
+                    }
                 }
-
-                if (_secureTextField is not null)
+                else
                 {
-                    if (preventScreenshot)
-                        _secureTextField.SecureTextEntry = preventScreenshot;
-                    else
-                    {
+                    if (_secureTextField is not null)
                         _secureTextField.SecureTextEntry = false;
-                        _secureTextField = null;
+                    
+                    if (_imageView is not null)
+                    {
+                        _imageView.Layer.RemoveFromSuperLayer();
+                        _imageView.RemoveFromSuperview();
+                    }
+
+                    if (_view is not null)
+                    {
+                        _view.Layer.RemoveFromSuperLayer();
+                        _view.RemoveFromSuperview();
                     }
                 }
             }
