@@ -62,30 +62,6 @@
 	  <MauiXaml Update="Platforms\Windows\App.xaml">
 	    <Generator></Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Legacy\AndroidPages\SecuredPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Legacy\AndroidPages\SecurityScreenTestPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Legacy\IOSPages\BlurProtectionPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Legacy\IOSPages\ColorProtectionPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Legacy\IOSPages\ImageProtectionPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Legacy\IOSPages\RecordingProtectionPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Legacy\IOSPages\ScreenshotProtectionIOSPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Legacy\WindowsPages\ScreenshotProtectionPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
