@@ -63,7 +63,7 @@ internal class ColorProtectionManager
 
     private static void EnableColorScreenProtection(UIWindow? window, string hexColor)
     {
-        if (window != null)
+        if (window is not null)
         {
             _screenColor = new UIView(window.Bounds)
             {

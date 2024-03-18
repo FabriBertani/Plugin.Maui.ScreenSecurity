@@ -39,7 +39,7 @@ internal class ImageProtectionManager
 
     private static void EnableImageScreenProtection(string image, UIWindow? window)
     {
-        if (window != null)
+        if (window is not null)
         {
             DisableImageScreenProtection();
 

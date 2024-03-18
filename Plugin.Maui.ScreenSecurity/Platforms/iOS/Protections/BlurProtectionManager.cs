@@ -63,7 +63,7 @@ internal class BlurProtectionManager
 
     private static void EnableBlurScreenProtection(UIWindow? window = null, ThemeStyle? style = null)
     {
-        if (window != null)
+        if (window is not null)
         {
             var blurEffectStyle = style switch
             {
