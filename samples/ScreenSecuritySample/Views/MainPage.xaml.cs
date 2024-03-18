@@ -49,4 +49,9 @@ public partial class MainPage : ContentPage
 
         base.OnDisappearing();
     }
+
+    private async void Button_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("unprotected_page", true);
+    }
 }
