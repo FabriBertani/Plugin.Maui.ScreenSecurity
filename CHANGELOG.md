@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.7-beta (05/18/2024)
+[Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.1.6...v1.1.7-beta)
+
+**Fixed bugs:**
+- Implemented a new screenshot prevention method for iOS 17.
+- Fixed `GetWindow` method on iOS.
+
 ## 1.1.6 (03/18/2024)
 [Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.1.5...v1.1.6)
 
