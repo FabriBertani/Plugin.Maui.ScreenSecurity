@@ -1,5 +1,4 @@
-﻿using CoreFoundation;
-using CoreGraphics;
+﻿using Foundation;
 using Plugin.Maui.ScreenSecurity.Handlers;
 using UIKit;
 
@@ -9,7 +8,6 @@ internal class ScreenshotProtectionManager
 {
     private static UITextField? _secureTextField = null;
     private static UIView? _view = null;
-    private static UIImageView? _imageView = null;
 
     internal static void HandleScreenshotProtection(bool enabled, UIWindow? window = null)
     {
@@ -25,50 +23,77 @@ internal class ScreenshotProtectionManager
 
     private static void SetScreenshotProtection(bool preventScreenshot, UIWindow? window)
     {
-        DispatchQueue.MainQueue.DispatchAsync(() =>
+        NSRunLoop.Main.BeginInvokeOnMainThread(() =>
         {
             try
             {
-                if (preventScreenshot)
+                if (UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
                 {
-                    if (window is not null)
+                    if (preventScreenshot)
                     {
-                        _secureTextField = new();
-
-                        _view = new(new CGRect(x: 0, y: 0, width: _secureTextField.Frame.Width, height: _secureTextField.Frame.Height));
-
-                        _imageView = new(new UIImage(IOSHelpers.GetCurrentTheme() == ThemeStyle.Light ? "white_bg.png" : "black_bg.png"))
+                        if (window is not null)
                         {
-                            Frame = new CGRect(x: 0, y: 0, width: UIScreen.MainScreen.Bounds.Width, height: UIScreen.MainScreen.Bounds.Height)
-                        };
+                            _secureTextField = new();
 
-                        _secureTextField.SecureTextEntry = true;
+                            var color = IOSHelpers.GetCurrentTheme() == ThemeStyle.Light ? UIColor.White : UIColor.Black;
 
-                        window.AddSubview(_secureTextField);
-                        _view.AddSubview(_imageView);
+                            _view = new UIView(window.Bounds)
+                            {
+                                BackgroundColor = color
+                            };
 
-                        window.Layer.SuperLayer?.AddSublayer(_secureTextField.Layer);
-                        _secureTextField.Layer.Sublayers?.Last().AddSublayer(window.Layer);
+                            _secureTextField.SecureTextEntry = true;
 
-                        _secureTextField.LeftView = _view;
-                        _secureTextField.LeftViewMode = UITextFieldViewMode.Always;
+                            window.AddSubview(_secureTextField);
+                            window.AddSubview(_view);
+
+                            window.Layer.SuperLayer?.AddSublayer(_secureTextField.Layer);
+                            _secureTextField.Layer.Sublayers?.Last().AddSublayer(window.Layer);
+
+                            _secureTextField.LeftView = _view;
+                            _secureTextField.LeftViewMode = UITextFieldViewMode.Always;
+                        }
+                    }
+                    else
+                    {
+                        if (_secureTextField is not null)
+                            _secureTextField.SecureTextEntry = false;
+
+                        if (_view is not null)
+                        {
+                            _view.Layer.RemoveFromSuperLayer();
+                            _view.RemoveFromSuperview();
+                        }
                     }
                 }
                 else
                 {
-                    if (_secureTextField is not null)
-                        _secureTextField.SecureTextEntry = false;
-                    
-                    if (_imageView is not null)
+                    if (window is not null)
                     {
-                        _imageView.Layer.RemoveFromSuperLayer();
-                        _imageView.RemoveFromSuperview();
+                        _secureTextField ??= new()
+                        {
+                            UserInteractionEnabled = false
+                        };
+
+                        UIViewController? rootViewController = GetRootPresentedViewController(window);
+
+                        rootViewController?.View?.AddSubview(_secureTextField);
+                        window.MakeKeyAndVisible();
+
+                        window.Layer.SuperLayer?.AddSublayer(_secureTextField.Layer);
+
+                        _secureTextField.Layer.Sublayers?[0].AddSublayer(window.Layer);
                     }
 
-                    if (_view is not null)
+                    if (_secureTextField is not null)
                     {
-                        _view.Layer.RemoveFromSuperLayer();
-                        _view.RemoveFromSuperview();
+                        if (preventScreenshot)
+                            _secureTextField.SecureTextEntry = preventScreenshot;
+                        else
+                        {
+                            _secureTextField.SecureTextEntry = false;
+                            _secureTextField = null;
+                        }
                     }
                 }
             }
