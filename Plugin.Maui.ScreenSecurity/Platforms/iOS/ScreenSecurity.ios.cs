@@ -5,7 +5,7 @@ namespace Plugin.Maui.ScreenSecurity;
 
 partial class ScreenSecurityImplementation : IScreenSecurity
 {
-    private readonly Lazy<UIWindow?> _window = new(IOSHelpers.GetWindow);
+    private UIWindow? _window;
 
     /// <summary>
     /// Activates the screen security protection when the app is sent
@@ -14,7 +14,9 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     /// </summary>
     public void ActivateScreenSecurityProtection()
     {
-        BlurProtectionManager.HandleBlurProtection(true, IOSHelpers.GetCurrentTheme(), _window.Value);
+        GetWindow();
+
+        BlurProtectionManager.HandleBlurProtection(true, IOSHelpers.GetCurrentTheme(), _window);
 
         HandleScreenCaptureProtection(true, true);
     }
@@ -33,8 +35,10 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     /// </remarks>
     public void ActivateScreenSecurityProtection(bool blurScreenProtection = true, bool preventScreenshot = true, bool preventScreenRecording = true)
     {
+        GetWindow();
+
         if (blurScreenProtection)
-            BlurProtectionManager.HandleBlurProtection(true, IOSHelpers.GetCurrentTheme(), _window.Value);
+            BlurProtectionManager.HandleBlurProtection(true, IOSHelpers.GetCurrentTheme(), _window);
 
         HandleScreenCaptureProtection(preventScreenshot, preventScreenRecording);
     }
@@ -54,11 +58,13 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     /// </remarks>
     public void ActivateScreenSecurityProtection(ScreenProtectionOptions screenProtectionOptions)
     {
+        GetWindow();
+
         if (!string.IsNullOrEmpty(screenProtectionOptions.HexColor)
             && string.IsNullOrEmpty(screenProtectionOptions.Image))
         {
             if (screenProtectionOptions.HexColor.IsHexColor())
-                ColorProtectionManager.HandleColorProtection(true, screenProtectionOptions.HexColor, _window.Value);
+                ColorProtectionManager.HandleColorProtection(true, screenProtectionOptions.HexColor, _window);
             else
                 throw new ArgumentException($"{screenProtectionOptions.HexColor} is not a valid hexadecimal color.");
         }
@@ -66,7 +72,7 @@ partial class ScreenSecurityImplementation : IScreenSecurity
             && string.IsNullOrEmpty(screenProtectionOptions.HexColor))
         {
             if (screenProtectionOptions.Image.IsValidImage())
-                ImageProtectionManager.HandleImageProtection(true, screenProtectionOptions.Image, _window.Value);
+                ImageProtectionManager.HandleImageProtection(true, screenProtectionOptions.Image, _window);
             else
                 throw new ArgumentException($"{screenProtectionOptions.Image} is not a valid image format.");
         }
@@ -92,8 +98,13 @@ partial class ScreenSecurityImplementation : IScreenSecurity
 
     private void HandleScreenCaptureProtection(bool preventScreenshot, bool preventScreenRecording)
     {
-        ScreenshotProtectionManager.HandleScreenshotProtection(preventScreenshot, _window.Value);
+        ScreenshotProtectionManager.HandleScreenshotProtection(preventScreenshot, _window);
 
-        ScreenRecordingProtectionManager.HandleScreenRecordingProtection(preventScreenRecording, string.Empty, _window.Value);
+        ScreenRecordingProtectionManager.HandleScreenRecordingProtection(preventScreenRecording, string.Empty, _window);
+    }
+
+    private void GetWindow()
+    {
+        _window ??= IOSHelpers.GetWindow();
     }
 }
