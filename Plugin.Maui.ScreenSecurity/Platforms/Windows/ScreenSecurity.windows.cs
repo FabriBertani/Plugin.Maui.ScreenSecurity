@@ -63,6 +63,11 @@ partial class ScreenSecurityImplementation : IScreenSecurity
         SetScreenshotProtection(false);
     }
 
+    /// <summary>
+    /// Checks if screen protection is enabled.
+    /// </summary>
+    public bool IsProtectionEnabled { get; private set; }
+
     private void SetScreenshotProtection(bool enabled)
     {
         try
@@ -71,6 +76,8 @@ partial class ScreenSecurityImplementation : IScreenSecurity
 
             if (hwnd != IntPtr.Zero)
                 _ = NativeMethods.SetWindowDisplayAffinity(hwnd, enabled ? WDA_MONITOR : WDA_NONE);
+
+            IsProtectionEnabled = enabled;
         }
         catch (Exception ex)
         {

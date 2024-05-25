@@ -46,4 +46,9 @@ public interface IScreenSecurity
     /// Deactivates all screen security protection.
     /// </summary>
     void DeactivateScreenSecurityProtection();
+
+    /// <summary>
+    /// Checks if screen protection is enabled.
+    /// </summary>
+    bool IsProtectionEnabled { get; }
 }

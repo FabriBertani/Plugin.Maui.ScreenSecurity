@@ -78,6 +78,8 @@ partial class ScreenSecurityImplementation : IScreenSecurity
         }
 
         HandleScreenCaptureProtection(screenProtectionOptions.PreventScreenshot, screenProtectionOptions.PreventScreenRecording);
+
+        IsProtectionEnabled = true;
     }
 
     /// <summary>
@@ -94,7 +96,14 @@ partial class ScreenSecurityImplementation : IScreenSecurity
         ScreenRecordingProtectionManager.HandleScreenRecordingProtection(false);
 
         ScreenshotProtectionManager.HandleScreenshotProtection(false);
+
+        IsProtectionEnabled = false;
     }
+
+    /// <summary>
+    /// Checks if screen protection is enabled.
+    /// </summary>
+    public bool IsProtectionEnabled { get; private set; }
 
     private void HandleScreenCaptureProtection(bool preventScreenshot, bool preventScreenRecording)
     {
