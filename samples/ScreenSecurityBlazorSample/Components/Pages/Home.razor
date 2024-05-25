@@ -1,0 +1,37 @@
+﻿@page "/"
+
+@using Plugin.Maui.ScreenSecurity;
+
+<h1 style ="text-align: center;">Home</h1>
+
+<p style="text-align: center;">Use the buttons below to activate or deactivate screen protection.</p>
+
+<br/>
+
+<button class="btn btn-primary" @onclick="EnableScreenSecurity">Enable Screen Security</button>
+<br/>
+<br/>
+<button class="btn btn-secondary" @onclick="DisableScreenSecurity">Disable Screen Security</button>
+
+<br/><br/>
+<br/><br/>
+
+<p style="font-size: 14px;">If you want to activate screen protection for the whole application, uncomment the OnAppearing section of MainPage.xaml.cs</p>
+
+@code {
+    async Task EnableScreenSecurity()
+    {
+        ScreenSecurity.Default?.ActivateScreenSecurityProtection();
+
+        if (Application.Current?.MainPage is not null)
+            await Application.Current.MainPage.DisplayAlert("Screen Security", "Screen security enabled.", "OK");
+    }
+
+    async Task DisableScreenSecurity()
+    {
+        ScreenSecurity.Default?.DeactivateScreenSecurityProtection();
+
+        if (Application.Current?.MainPage is not null)
+            await Application.Current.MainPage.DisplayAlert("Screen Security", "Screen security disabled.", "OK");
+    }
+}

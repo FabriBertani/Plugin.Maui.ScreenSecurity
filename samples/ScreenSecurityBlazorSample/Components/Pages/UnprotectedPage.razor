@@ -1,0 +1,14 @@
+﻿@page "/unprotected_page"
+
+@using Plugin.Maui.ScreenSecurity;
+
+<h1 style="text-align: center;">Unprotected Page</h1>
+
+<p style="text-align: center;">This page is NOT protected against content exposure.</p>
+
+@code {
+    protected override void OnInitialized()
+    {
+        ScreenSecurity.Default?.DeactivateScreenSecurityProtection();
+    }
+}
