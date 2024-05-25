@@ -2,7 +2,8 @@
 <ContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="ScreenSecuritySample.Views.MainPage">
+    x:Class="ScreenSecuritySample.Views.MainPage"
+    x:Name="this">
     <ScrollView
         Padding="16, 0"
         HorizontalScrollBarVisibility="Never">
@@ -19,6 +20,17 @@
                 FontSize="Large"
                 Text="Navigate to unprotected page"
                 Clicked="Button_Clicked" />
+            <Button
+                x:Name="activationBtn"
+                CornerRadius="15"
+                FontSize="Large"
+                Clicked="ActivationBtn_Clicked" />
+            <Label
+                x:Name="isEnabledLabel"
+                HorizontalTextAlignment="Start"
+                VerticalTextAlignment="Center"
+                FontSize="Medium"
+                Text="Screen protection enabled:"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

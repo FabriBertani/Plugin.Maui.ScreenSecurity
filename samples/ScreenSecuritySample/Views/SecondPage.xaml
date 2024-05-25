@@ -20,6 +20,12 @@
                 FontSize="Large"
                 Text="Return to protected page"
                 Clicked="Button_Clicked" />
+            <Label
+                x:Name="isEnabledLabel"
+                HorizontalTextAlignment="Start"
+                VerticalTextAlignment="Center"
+                FontSize="Medium"
+                Text="Screen protection enabled:"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

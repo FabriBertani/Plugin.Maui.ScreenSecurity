@@ -21,4 +21,6 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     {
         throw new NotImplementedException();
     }
+
+    public bool IsProtectionEnabled { get; private set; }
 }

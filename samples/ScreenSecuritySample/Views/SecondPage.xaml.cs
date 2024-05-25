@@ -19,6 +19,8 @@ public partial class SecondPage : ContentPage
 
         // Deactivate the screen security protection.
         _screenSecurity.DeactivateScreenSecurityProtection();
+
+        isEnabledLabel.Text = $"Screen protection enabled: {_screenSecurity.IsProtectionEnabled}";
     }
 
     private async void Button_Clicked(object sender, EventArgs e)

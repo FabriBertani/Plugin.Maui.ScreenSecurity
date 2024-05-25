@@ -75,7 +75,11 @@ partial class ScreenSecurityImplementation : IScreenSecurity
 #pragma warning restore CA1416
 
                     if (enabled)
-                        activity.Window?.SetFlags(WindowManagerFlags.Secure, WindowManagerFlags.Secure);
+                    {
+                         activity.Window?.SetFlags(WindowManagerFlags.Secure, WindowManagerFlags.Secure);
+
+                        IsProtectionEnabled = enabled;
+                    }
                     else
                         activity.Window?.ClearFlags(WindowManagerFlags.Secure);
                 }
@@ -86,4 +90,9 @@ partial class ScreenSecurityImplementation : IScreenSecurity
             }
         });
     }
+
+    /// <summary>
+    /// Checks if screen protection is enabled.
+    /// </summary>
+    public bool IsProtectionEnabled { get; private set; }
 }
