@@ -20,6 +20,10 @@ public partial class MainPage : ContentPage
         // Activate the screen security protection with default settings
         _screenSecurity.ActivateScreenSecurityProtection();
 
+        CheckStatusButton();
+
+        isEnabledLabel.Text = $"Screen protection enabled: {_screenSecurity.IsProtectionEnabled}";
+
         /*
         // For changing iOS options, follow one of the next examples:
 
@@ -53,5 +57,24 @@ public partial class MainPage : ContentPage
     private async void Button_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("unprotected_page", true);
+    }
+
+    private void ActivationBtn_Clicked(object sender, EventArgs e)
+    {
+        if (!_screenSecurity.IsProtectionEnabled)
+            _screenSecurity.ActivateScreenSecurityProtection();
+        else
+            _screenSecurity.DeactivateScreenSecurityProtection();
+
+        CheckStatusButton();
+
+        isEnabledLabel.Text = $"Screen protection enabled: {_screenSecurity.IsProtectionEnabled}";
+    }
+
+    private void CheckStatusButton()
+    {
+        activationBtn.Text = _screenSecurity.IsProtectionEnabled
+            ? "Deactivate Screen Protection"
+            : "Activate Screen Protection";
     }
 }

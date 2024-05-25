@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Maui;
-using Plugin.Maui.ScreenSecurity;
+﻿using Plugin.Maui.ScreenSecurity;
 using ScreenSecuritySample.Views;
 
 namespace ScreenSecuritySample;
@@ -11,7 +10,6 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
-            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
