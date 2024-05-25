@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.8-beta (05/25/2024)
+[Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.1.7-beta...v1.1.8-beta)
+
+**Implemented enhancements:**
+- Added `Blazor` sample to showcase the implementation of this plugin.
+- Added `IsProtectionEnabled` property to check if screen protection is already enabled or disabled.
+
 ## 1.1.7-beta (05/18/2024)
 [Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.1.6...v1.1.7-beta)
 
