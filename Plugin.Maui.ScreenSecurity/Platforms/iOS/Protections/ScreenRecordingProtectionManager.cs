@@ -19,21 +19,21 @@ internal class ScreenRecordingProtectionManager
                         if (enabled)
                             EnableScreenRecordingProtection(withColor, window);
                         else
-                            DisableScreenRecordingProtection();
+                            DisableScreenRecordingProtection(window);
                     }
                 }
                 else
-                    DisableScreenRecordingProtection();
+                    DisableScreenRecordingProtection(window);
 #elif NET7_0
                 if (UIScreen.MainScreen.Captured)
                 {
                     if (enabled)
                         EnableScreenRecordingProtection(withColor, window);
                     else
-                        DisableScreenRecordingProtection();
+                        DisableScreenRecordingProtection(window);
                 }
                 else
-                    DisableScreenRecordingProtection();
+                    DisableScreenRecordingProtection(window);
 #endif
             }
             catch (Exception ex)
@@ -51,9 +51,9 @@ internal class ScreenRecordingProtectionManager
             BlurProtectionManager.EnableBlur(window, ThemeStyle.Light);
     }
 
-    private static void DisableScreenRecordingProtection()
+    private static void DisableScreenRecordingProtection(UIWindow? window)
     {
-        BlurProtectionManager.DisableBlur();
+        BlurProtectionManager.DisableBlur(window);
 
         ColorProtectionManager.DisableColor();
     }

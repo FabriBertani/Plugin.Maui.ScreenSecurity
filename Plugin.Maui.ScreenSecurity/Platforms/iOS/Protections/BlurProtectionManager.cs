@@ -16,7 +16,7 @@ internal class BlurProtectionManager
                 if (enabled)
                     EnableBlurScreenProtection(window, style);
                 else
-                    DisableBlurScreenProtection();
+                    DisableBlurScreenProtection(window);
             }
             catch (Exception ex)
             {
@@ -28,7 +28,7 @@ internal class BlurProtectionManager
         {
             try
             {
-                DisableBlurScreenProtection();
+                DisableBlurScreenProtection(window);
             }
             catch (Exception ex)
             {
@@ -49,11 +49,11 @@ internal class BlurProtectionManager
         }
     }
 
-    internal static void DisableBlur()
+    internal static void DisableBlur(UIWindow? window)
     {
         try
         {
-            DisableBlurScreenProtection();
+            DisableBlurScreenProtection(window);
         }
         catch (Exception ex)
         {
@@ -77,15 +77,23 @@ internal class BlurProtectionManager
             {
                 Frame = window.Frame
             };
-        
+
             window.AddSubview(_blurBackground);
         }
     }
 
-    private static void DisableBlurScreenProtection()
+    private static void DisableBlurScreenProtection(UIWindow? window)
     {
-        _blurBackground?.RemoveFromSuperview();
-
-        _blurBackground = null;
+        if (window is not null)
+        {
+            foreach (var subview in window.Subviews)
+            {
+                if (subview is UIVisualEffectView)
+                {
+                    subview.RemoveFromSuperview();
+                }
+            }
+            _blurBackground = null;
+        }
     }
 }
