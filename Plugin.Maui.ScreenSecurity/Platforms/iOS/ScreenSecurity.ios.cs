@@ -19,6 +19,8 @@ partial class ScreenSecurityImplementation : IScreenSecurity
         BlurProtectionManager.HandleBlurProtection(true, IOSHelpers.GetCurrentTheme(), _window);
 
         HandleScreenCaptureProtection(true, true);
+
+        IsProtectionEnabled = true;
     }
 
     /// <summary>
@@ -41,6 +43,8 @@ partial class ScreenSecurityImplementation : IScreenSecurity
             BlurProtectionManager.HandleBlurProtection(true, IOSHelpers.GetCurrentTheme(), _window);
 
         HandleScreenCaptureProtection(preventScreenshot, preventScreenRecording);
+
+        IsProtectionEnabled = true;
     }
 
     /// <summary>
