@@ -6,6 +6,16 @@ namespace Plugin.Maui.ScreenSecurity;
 
 partial class ScreenSecurityImplementation : IScreenSecurity
 {
+    public ScreenSecurityImplementation()
+    {
+        ScreenCaptureEventHandler.ScreenCaptured += OnScreenCaptured;
+    }
+
+    ~ScreenSecurityImplementation()
+    {
+        ScreenCaptureEventHandler.ScreenCaptured -= OnScreenCaptured;
+    }
+
     /// <summary>
     /// Activates the screen security protection when the app is sent
     /// to <b>Recents screen</b> or the <b>App Switcher</b>.
@@ -87,6 +97,11 @@ partial class ScreenSecurityImplementation : IScreenSecurity
                 ErrorsHandler.HandleException(nameof(SetScreenSecurityProtection), ex);
             }
         });
+    }
+
+    private void OnScreenCaptured(object? sennder, EventArgs e)
+    {
+        ScreenCaptured?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>

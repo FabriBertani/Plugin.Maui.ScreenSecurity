@@ -1,4 +1,5 @@
-﻿using Plugin.Maui.ScreenSecurity.Platforms.iOS;
+﻿using Plugin.Maui.ScreenSecurity.Handlers;
+using Plugin.Maui.ScreenSecurity.Platforms.iOS;
 using UIKit;
 
 namespace Plugin.Maui.ScreenSecurity;
@@ -6,6 +7,16 @@ namespace Plugin.Maui.ScreenSecurity;
 partial class ScreenSecurityImplementation : IScreenSecurity
 {
     private UIWindow? _window;
+
+    public ScreenSecurityImplementation()
+    {
+        ScreenCaptureEventHandler.ScreenCaptured += OnScreenCaptured;
+    }
+
+    ~ScreenSecurityImplementation()
+    {
+        ScreenCaptureEventHandler.ScreenCaptured -= OnScreenCaptured;
+    }
 
     /// <summary>
     /// Activates the screen security protection when the app is sent
@@ -15,6 +26,11 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     public void ActivateScreenSecurityProtection()
     {
         GetWindow();
+
+        UIApplication.Notifications.ObserveUserDidTakeScreenshot((sender, args) =>
+        {
+            ScreenCaptureEventHandler.RaiseScreenCaptured();
+        });
 
         BlurProtectionManager.HandleBlurProtection(true, IOSHelpers.GetCurrentTheme(), _window);
 
@@ -124,5 +140,10 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     private void GetWindow()
     {
         _window ??= IOSHelpers.GetWindow();
+    }
+
+    private void OnScreenCaptured(object? sennder, EventArgs e)
+    {
+        ScreenCaptured?.Invoke(this, EventArgs.Empty);
     }
 }
