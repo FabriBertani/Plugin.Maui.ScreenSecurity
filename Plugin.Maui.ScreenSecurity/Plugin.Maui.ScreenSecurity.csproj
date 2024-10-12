@@ -34,6 +34,9 @@
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	</PropertyGroup>
     <ItemGroup Condition="!($(TargetFramework.StartsWith('net')) == true AND $(TargetFramework.EndsWith('.0')) == true AND $(TargetFramework.Contains('-')) != true)">
         <Compile Remove="**\*.net.cs" />
         <None Include="**\*.net.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
@@ -44,6 +47,9 @@
         <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Platforms\Android\Helpers\" />
+    </ItemGroup>
 	<ItemGroup>
 	  <None Include="..\Assets\plugin.maui.screensecurity_128x128.jpg">
 	    <Pack>True</Pack>
@@ -59,4 +65,7 @@
 	  </None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Platforms\Android\Helpers\" />
+	</ItemGroup>
 </Project>

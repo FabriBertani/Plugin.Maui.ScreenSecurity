@@ -10,6 +10,16 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     private const uint WDA_NONE = 0;
     private const uint WDA_MONITOR = 1;
 
+    public ScreenSecurityImplementation()
+    {
+        ScreenCaptureEventHandler.ScreenCaptured += OnScreenCaptured;
+    }
+
+    ~ScreenSecurityImplementation()
+    {
+        ScreenCaptureEventHandler.ScreenCaptured -= OnScreenCaptured;
+    }
+
     /// <summary>
     /// Activates the screen security protection when the app is sent
     /// to <b>Recents screen</b> or the <b>App Switcher</b>.
@@ -68,6 +78,11 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     /// </summary>
     public bool IsProtectionEnabled { get; private set; }
 
+    /// <summary>
+    /// Triggered when the screen is captured by a screenshot.
+    /// </summary>
+    public event EventHandler<EventArgs>? ScreenCaptured;
+
     private void SetScreenshotProtection(bool enabled)
     {
         try
@@ -83,6 +98,11 @@ partial class ScreenSecurityImplementation : IScreenSecurity
         {
             ErrorsHandler.HandleException(nameof(SetScreenshotProtection), ex);
         }
+    }
+
+    private void OnScreenCaptured(object sender, EventArgs e)
+    {
+        ScreenCaptured?.Invoke(this, EventArgs.Empty);
     }
 
     private static nint GetWindowHandle() => ((MauiWinUIWindow)Application.Current?.Windows[0].Handler.PlatformView!).WindowHandle;
