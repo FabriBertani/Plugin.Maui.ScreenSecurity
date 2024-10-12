@@ -51,4 +51,9 @@ public interface IScreenSecurity
     /// Checks if screen protection is enabled.
     /// </summary>
     bool IsProtectionEnabled { get; }
+
+    /// <summary>
+    /// Triggered when the screen is captured, either by a screenshot or recording.
+    /// </summary>
+    event EventHandler<EventArgs>? ScreenCaptured;
 }

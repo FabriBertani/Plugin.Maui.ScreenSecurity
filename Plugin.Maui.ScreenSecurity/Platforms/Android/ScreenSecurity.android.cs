@@ -93,4 +93,9 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     /// Checks if screen protection is enabled.
     /// </summary>
     public bool IsProtectionEnabled { get; private set; }
+
+    /// <summary>
+    /// Triggered when the screen is captured, either by a screenshot or recording.
+    /// </summary>
+    public event EventHandler<EventArgs>? ScreenCaptured;
 }

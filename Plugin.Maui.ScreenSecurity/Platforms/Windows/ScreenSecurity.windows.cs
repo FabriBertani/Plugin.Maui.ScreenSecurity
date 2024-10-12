@@ -68,6 +68,11 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     /// </summary>
     public bool IsProtectionEnabled { get; private set; }
 
+    /// <summary>
+    /// Triggered when the screen is captured by a screenshot.
+    /// </summary>
+    public event EventHandler<EventArgs>? ScreenCaptured;
+
     private void SetScreenshotProtection(bool enabled)
     {
         try
