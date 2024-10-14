@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.2.0 (10/14/2024)
+[Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.1.6...v1.2.0)
+
+**Implemented enhancements:**
+- Added `Blazor` sample to showcase the implementation of this plugin.
+- Added `IsProtectionEnabled` property to check if screen protection is already enabled or disabled.
+- Added `ScreenCaptured` event handler, which triggers notifications when a screenshot is taken or the screen is recorded.
+- Added plugin initialization.
+- Updated sample projects with new implementations.
+
+**Fixed bugs:**
+- Implemented a new screenshot prevention method for iOS 17+.
+- Fixed `GetWindow` method on iOS.
+- Merged [#39: Bug iOS on Blur](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/pull/39) PR by [fabien367](https://github.com/fabien367).
+
 ## 1.1.8-beta (05/25/2024)
 [Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.1.7-beta...v1.1.8-beta)
 
