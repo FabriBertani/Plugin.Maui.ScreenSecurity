@@ -40,7 +40,7 @@ public partial class SecondPage : ContentPage
     private async void OnScreenCaptured(object sender, EventArgs e)
     {
         string title = "ScreenSecuritySample";
-        string message = "Screenshot was taken.";
+        string message = "Screen was captured by screenshot or recording.";
 
         await Shell.Current.DisplayAlert(title, message, "Ok");
     }
