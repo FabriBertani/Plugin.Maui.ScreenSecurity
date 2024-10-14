@@ -1,4 +1,5 @@
-﻿using Plugin.Maui.ScreenSecurity.Handlers;
+﻿using Foundation;
+using Plugin.Maui.ScreenSecurity.Handlers;
 using Plugin.Maui.ScreenSecurity.Platforms.iOS;
 using UIKit;
 
@@ -8,6 +9,9 @@ partial class ScreenSecurityImplementation : IScreenSecurity
 {
     private UIWindow? _window;
 
+    private NSObject? _screenshotObserver;
+    private NSObject? _screenCapturedObserver;
+
     public ScreenSecurityImplementation()
     {
         ScreenCaptureEventHandler.ScreenCaptured += OnScreenCaptured;
@@ -16,6 +20,18 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     ~ScreenSecurityImplementation()
     {
         ScreenCaptureEventHandler.ScreenCaptured -= OnScreenCaptured;
+
+        if (_screenshotObserver is not null)
+        {
+            _screenshotObserver.Dispose();
+            _screenshotObserver = null;
+        }
+
+        if (_screenCapturedObserver is not null)
+        {
+            _screenCapturedObserver.Dispose();
+            _screenCapturedObserver = null;
+        }
     }
 
     /// <summary>
@@ -27,10 +43,7 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     {
         GetWindow();
 
-        UIApplication.Notifications.ObserveUserDidTakeScreenshot((sender, args) =>
-        {
-            ScreenCaptureEventHandler.RaiseScreenCaptured();
-        });
+        EnableScreenCapturedEvent();
 
         BlurProtectionManager.HandleBlurProtection(true, IOSHelpers.GetCurrentTheme(), _window);
 
@@ -54,6 +67,8 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     public void ActivateScreenSecurityProtection(bool blurScreenProtection = true, bool preventScreenshot = true, bool preventScreenRecording = true)
     {
         GetWindow();
+
+        EnableScreenCapturedEvent();
 
         if (blurScreenProtection)
             BlurProtectionManager.HandleBlurProtection(true, IOSHelpers.GetCurrentTheme(), _window);
@@ -79,6 +94,8 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     public void ActivateScreenSecurityProtection(ScreenProtectionOptions screenProtectionOptions)
     {
         GetWindow();
+
+        EnableScreenCapturedEvent();
 
         if (!string.IsNullOrEmpty(screenProtectionOptions.HexColor)
             && string.IsNullOrEmpty(screenProtectionOptions.Image))
@@ -135,6 +152,19 @@ partial class ScreenSecurityImplementation : IScreenSecurity
         ScreenshotProtectionManager.HandleScreenshotProtection(preventScreenshot, _window);
 
         ScreenRecordingProtectionManager.HandleScreenRecordingProtection(preventScreenRecording, string.Empty, _window);
+    }
+
+    private void EnableScreenCapturedEvent()
+    {
+        _screenshotObserver = UIApplication.Notifications.ObserveUserDidTakeScreenshot((sender, args) =>
+        {
+            ScreenCaptureEventHandler.RaiseScreenCaptured();
+        });
+
+        _screenCapturedObserver = UIScreen.Notifications.ObserveCapturedDidChange((sender, args) =>
+        {
+            ScreenCaptureEventHandler.RaiseScreenCaptured();
+        });
     }
 
     private void GetWindow()
