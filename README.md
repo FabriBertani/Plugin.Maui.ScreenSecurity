@@ -1,5 +1,5 @@
 # Plugin.Maui.ScreenSecurity
-[![NuGet](https://img.shields.io/nuget/v/Plugin.Maui.ScreenSecurity.svg?label=NuGet)](https://www.nuget.org/packages/Plugin.Maui.ScreenSecurity/1.1.8-beta)
+[![NuGet](https://img.shields.io/nuget/v/Plugin.Maui.ScreenSecurity.svg?label=NuGet)](https://www.nuget.org/packages/Plugin.Maui.ScreenSecurity)
 
 `Plugin.Maui.ScreenSecurity` provides a seamless solution for preventing content exposure, as well as blocking screenshots and recordings within your .NET MAUI application
 
@@ -10,26 +10,52 @@
 |.Net MAUI iOS|iOS 14+|
 |Windows|10.0.17763+|
 
-## Version 1.1.6
+## Version 1.2.0
 
 ### What's new?
-- Removed .Net6 support. :warning:
-- Added .Net8 support to all platforms.
-- Fixed iOS 17 issues.
-- Fixed screenshot not working on iOS 17+ issue, by changing the screenshot protection implementation, now a blank white or black (depending on the current OS theme) is added before taking the screenshot to cover the screen content. :exclamation:
+- Added `IsProtectionEnabled` property to check if screen protection is already enabled or disabled.
+- Added `ScreenCaptured` event handler, which triggers notifications when a screenshot is taken or the screen is recorded.
+- Fixed iOS issues.
+- Added `Blazor` sample to showcase the implementation of this plugin.
 
-Click [here](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/releases/tag/v1.1.6) to see the full Changelog!
+Click [here](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/releases/tag/v1.2.0) to see the full Changelog!
 
 ## Installation
 `Plugin.Maui.ScreenSecurity` is available via NuGet, grab the latest package and install it on your solution:
 
     Install-Package Plugin.Maui.ScreenSecurity
 
-In your `MauiProgram` class add the following `using` statement:
+Initialize the plugin in your `MauiProgram` class:
 
 ```csharp
 using Plugin.Maui.ScreenSecurity;
+
+public static MauiApp CreateMauiApp()
+{
+    var builder = MauiApp.CreateBuilder();
+
+    builder
+        .UseMauiApp<App>()
+        .ConfigureFonts(fonts =>
+        {
+            fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+            fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+        })
+        .UseScreenSecurity();
+
+    return builder.Build();
+}
 ```
+
+### Android
+
+In your `Android.manifest` file (Platforms/Android) add the following permission:
+
+```xml
+<uses-permission android:name="android.permission.DETECT_SCREEN_CAPTURE" />
+```
+
+### Using Plugin.Maui.ScreenSecurity
 
 Finally, add the default instance of the plugin as a singleton to inject it in your code late:
 
@@ -46,7 +72,7 @@ It's important to acknowledge that preventing users from taking screenshots or r
 ## API Usage
 > If you are still using version 1.0.0, please refer to the [Legacy docs](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/wiki/Legacy) for the previous version.
 
-The new unified API only have 2 methods: `ActivateScreenSecurityProtection()` and `DeactivateScreenSecurityProtection()`, with optional parameters that will be only applied to the iOS platform.
+The new unified API includes two methods: `ActivateScreenSecurityProtection()` and `DeactivateScreenSecurityProtection()`, with optional parameters applicable only to the iOS platform. It also provides two properties: `IsProtectionEnabled`, which checks if protection is active, and the `ScreenCaptured` event handler, which notifies when a screenshot is taken or the screen is recorded.
 
 ```csharp
 void ActivateScreenSecurityProtection();
@@ -88,6 +114,16 @@ void DeactivateScreenSecurityProtection();
 ```
 This method deactivates all screen security protection.
 
+```csharp
+bool IsProtectionEnabled { get; }
+```
+This bool checks if screen protection is enabled.
+
+```csharp
+event EventHandler<EventArgs>? ScreenCaptured;
+```
+The event handler is triggered when the screen is captured, either through a screenshot or recording on Android and iOS, **but only for screenshots on Windows**.
+
 ## Usage Example
 
 ```csharp
@@ -106,8 +142,15 @@ public partial class MainPage : ContentPage
     {
         base.OnAppearing();
 
-        // Activate the screen security protection with default settings
-        _screenSecurity.ActivateScreenSecurityProtection();
+        // Check if screen security protection is not enabled
+        if (!_screenSecurity.IsProtectionEnabled)
+        {
+            // Activate the screen security protection with default settings
+            _screenSecurity.ActivateScreenSecurityProtection();
+        }
+
+        // Attach to the ScreenCaptured event handler
+        _screenSecurity.ScreenCaptured += OnScreenCaptured;
 
         /*
         // For changing iOS options, follow one of the next examples:
@@ -129,15 +172,25 @@ public partial class MainPage : ContentPage
         };
 
         _screenSecurity.ActivateScreenSecurityProtection(screenProtectionOptions);
-
         */
     }
 
     protected override void OnDisappearing()
     {
         _screenSecurity.DeactivateScreenSecurityProtection();
-        
+
+        // Detach from the ScreenCaptured event handler
+        _screenSecurity.ScreenCaptured -= OnScreenCaptured;
+
         base.OnDisappearing();
+    }
+
+    private async void OnScreenCaptured(object sender, EventArgs e)
+    {
+        string title = "ScreenSecuritySample";
+        string message = "Screen was captured by screenshot or recording.";
+
+        await Shell.Current.DisplayAlert(title, message, "Ok");
     }
 }
 ```
@@ -149,8 +202,9 @@ Refer to the [ScreenSecuritySample](https://github.com/FabriBertani/Plugin.Maui.
 Please feel free to open an [Issue](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/issues) if you encounter any bugs or submit a PR to contribute improvements or fixes. Your contributions are greatly appreciated.
 
 ## License
-The Plugin.Maui.ScreenSecurity is licensed under [MIT](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/blob/main/LICENSE).
+The Plugin.Maui.ScreenSecurity is licensed under [MIT](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/blob/main/LICENSE) license.
 
 ## Contributors
 
 * **[Goran Karacic](https://github.com/Gogzs)** for the iOS 17 fix.
+* **[fabien367](https://github.com/fabien367)** for the iOS leak fix.
