@@ -2,9 +2,9 @@
 
 public class ScreenProtectionOptions
 {
-    private string hexColor = string.Empty;
+    private string _hexColor = string.Empty;
 
-    private string image = string.Empty;
+    private string _image = string.Empty;
 
     /// <summary>
     /// Hexadecimal color as <b><c>string</c></b> in the form of 
@@ -13,11 +13,11 @@ public class ScreenProtectionOptions
     /// </summary>
     public string HexColor
     {
-        get => hexColor;
+        get => _hexColor;
         set
         {
             if (string.IsNullOrEmpty(Image) && !string.IsNullOrEmpty(value))
-                hexColor = value;
+                _hexColor = value;
         }
     }
 
@@ -27,11 +27,11 @@ public class ScreenProtectionOptions
     /// </summary>
     public string Image
     {
-        get => image;
+        get => _image;
         set
         {
             if (string.IsNullOrEmpty(HexColor) && !string.IsNullOrEmpty(value))
-                image = value;
+                _image = value;
         }
     }
 

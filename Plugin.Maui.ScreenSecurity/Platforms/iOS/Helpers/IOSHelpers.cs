@@ -24,8 +24,8 @@ internal static class IOSHelpers
                 .LastOrDefault();
 
             var window = windowScene?.KeyWindow
-                ?? windowScene?.Windows?.FirstOrDefault(w => w.IsKeyWindow)
-                ?? windowScene?.Windows?.FirstOrDefault();
+                ?? windowScene?.Windows.FirstOrDefault(w => w.IsKeyWindow)
+                ?? windowScene?.Windows.FirstOrDefault();
 
             return window;
         }

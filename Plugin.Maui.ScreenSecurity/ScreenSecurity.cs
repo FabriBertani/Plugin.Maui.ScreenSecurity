@@ -5,9 +5,9 @@ public static class ScreenSecurity
     /// <summary>
     /// Provides the default implementation for static usage of this API.
     /// </summary>
-    static IScreenSecurity? defaultImplementation;
+    private static IScreenSecurity? _defaultImplementation;
 
-    public static IScreenSecurity? Default => defaultImplementation ??= new ScreenSecurityImplementation();
+    public static IScreenSecurity Default => _defaultImplementation ??= new ScreenSecurityImplementation();
 
-    internal static void SetDefault(IScreenSecurity? implementation) => defaultImplementation = implementation;
+    internal static void SetDefault(IScreenSecurity? implementation) => _defaultImplementation = implementation;
 }

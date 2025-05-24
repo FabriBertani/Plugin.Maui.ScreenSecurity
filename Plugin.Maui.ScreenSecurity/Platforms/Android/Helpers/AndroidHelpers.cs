@@ -7,8 +7,6 @@ using Object = Java.Lang.Object;
 
 namespace Plugin.Maui.ScreenSecurity.Platforms.Android;
 
-#if NET8_0_OR_GREATER
-
 internal class CustomScreenCaptureCallback : Object, IScreenCaptureCallback
 {
     public void OnScreenCaptured()
@@ -19,12 +17,11 @@ internal class CustomScreenCaptureCallback : Object, IScreenCaptureCallback
 
 internal class MainThreadExecutor : Object, IExecutor
 {
-    private readonly Handler _handler = new(Looper.MainLooper);
+    private readonly Handler _handler = new(Looper.MainLooper ?? throw new InvalidOperationException("MainLooper is null"));
 
     public void Execute(IRunnable? command)
     {
-        _handler.Post(command);
+        if (command is not null)
+            _handler.Post(command);
     }
 }
-
-#endif

@@ -67,37 +67,38 @@ internal class BlurProtectionManager
 
     private static void EnableBlurScreenProtection(UIWindow? window = null, ThemeStyle? style = null)
     {
-        if (window is not null)
+        if (window is null)
+            return;
+        
+        var blurEffectStyle = style switch
         {
-            var blurEffectStyle = style switch
-            {
-                ThemeStyle.Light => UIBlurEffectStyle.Light,
-                _ => UIBlurEffectStyle.Dark
-            };
+            ThemeStyle.Light => UIBlurEffectStyle.Light,
+            _ => UIBlurEffectStyle.Dark
+        };
 
-            using var blurEffect = UIBlurEffect.FromStyle(blurEffectStyle);
+        using var blurEffect = UIBlurEffect.FromStyle(blurEffectStyle);
 
-            _blurBackground = new UIVisualEffectView(blurEffect)
-            {
-                Frame = window.Frame
-            };
+        _blurBackground = new UIVisualEffectView(blurEffect)
+        {
+            Frame = window.Frame
+        };
 
-            window.AddSubview(_blurBackground);
-        }
+        window.AddSubview(_blurBackground);
     }
 
     private static void DisableBlurScreenProtection(UIWindow? window)
     {
-        if (window is not null)
+        if (window is null)
+            return;
+        
+        foreach (var subview in window.Subviews)
         {
-            foreach (var subview in window.Subviews)
+            if (subview is UIVisualEffectView)
             {
-                if (subview is UIVisualEffectView)
-                {
-                    subview.RemoveFromSuperview();
-                }
+                subview.RemoveFromSuperview();
             }
-            _blurBackground = null;
         }
+        
+        _blurBackground = null;
     }
 }

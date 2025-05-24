@@ -5,8 +5,10 @@ using Application = Microsoft.Maui.Controls.Application;
 
 namespace Plugin.Maui.ScreenSecurity;
 
-partial class ScreenSecurityImplementation : IScreenSecurity
+partial class ScreenSecurityImplementation : IScreenSecurity, IDisposable
 {
+    private bool _disposed;
+
     private const uint WDA_NONE = 0;
     private const uint WDA_MONITOR = 1;
 
@@ -17,13 +19,13 @@ partial class ScreenSecurityImplementation : IScreenSecurity
 
     ~ScreenSecurityImplementation()
     {
-        ScreenCaptureEventHandler.ScreenCaptured -= OnScreenCaptured;
+        Dispose(false);
     }
 
     /// <summary>
-    /// Activates the screen security protection when the app is sent
+    /// Activates screen security protection when the app is sent
     /// to <b>Recents screen</b> or the <b>App Switcher</b>.
-    /// Also prevents app <b>screenshots</b> or <b>recording</b> to be taken.
+    /// Also prevents <b>screenshots</b> or <b>screen recordings</b> from being taken.
     /// </summary>
     public void ActivateScreenSecurityProtection()
     {
@@ -31,16 +33,16 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     }
 
     /// <summary>
-    /// Activates the screen security protection when the app is sent
+    /// Activates screen security protection when the app is sent
     /// to <b>Recents screen</b> or the <b>App Switcher</b>.
-    /// Also prevents app <b>screenshots</b> or <b>recording</b> to be taken.
-    /// The specified parameters are for <b>iOS</b> only.
+    /// Also prevents <b>screenshots</b> or <b>screen recordings</b> from being taken.
+    /// The specified parameters apply to <b>iOS</b> only.
     /// </summary>
-    /// <param name="blurScreenProtection">A boolean value indicates whether to blur the screen.</param>
-    /// <param name="preventScreenshot">A boolean value that indicates whether to prevent screenshots.</param>
-    /// <param name="preventScreenRecording">A boolean value that indicates whether to prevent screen recording.</param>
+    /// <param name="blurScreenProtection">Indicates whether to blur the screen.</param>
+    /// <param name="preventScreenshot">Indicates whether to prevent screenshots.</param>
+    /// <param name="preventScreenRecording">Indicates whether to prevent screen recording.</param>
     /// <remarks>
-    /// These parameters have <u><b>no effect</b></u> on <b>Android</b> and <b>Windows</b> platforms.
+    /// These parameters have <i><b>no effect</b></i> on <b>Android</b> and <b>Windows</b> platforms.
     /// </remarks>
     public void ActivateScreenSecurityProtection(bool blurScreenProtection, bool preventScreenshot, bool preventScreenRecording)
     {
@@ -48,17 +50,17 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     }
 
     /// <summary>
-    /// Activates the screen security protection when the app is sent
+    /// Activates screen security protection when the app is sent
     /// to <b>Recents screen</b> or the <b>App Switcher</b>.
-    /// Also prevents app <b>screenshots</b> or <b>recording</b> to be taken.
-    /// The specified parameters are for using a <u>Color</u> or an <u>Image</u> as protection on iOS only.
+    /// Also prevents <b>screenshots</b> or <b>screen recordings</b> from being taken.
+    /// The specified parameters are for using a <i>Color</i> or an <i>Image</i> as protection on iOS only.
     /// </summary>
     /// <param name="screenProtectionOptions">
-    /// ScreenProtectionOptions contains extra options for screen security protection,
-    /// in order to customize the screen protection by specifying either a <b>Color</b> or an <b>Image</b> for iOS devices.
+    /// Provides additional settings for screen security on iOS,
+    /// allowing customization using either a <b>Color</b> or an <b>Image</b>.
     /// </param>
     /// <remarks>
-    /// These parameters have <u><b>no effect</b></u> on <b>Android</b> and <b>Windows</b> platforms.
+    /// These parameters have <i><b>no effect</b></i> on <b>Android</b> and <b>Windows</b> platforms.
     /// </remarks>
     public void ActivateScreenSecurityProtection(ScreenProtectionOptions screenProtectionOptions)
     {
@@ -74,12 +76,12 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     }
 
     /// <summary>
-    /// Checks if screen protection is enabled.
+    /// Indicates whether screen protection is currently enabled.
     /// </summary>
     public bool IsProtectionEnabled { get; private set; }
 
     /// <summary>
-    /// Triggered when the screen is captured by a screenshot.
+    /// Triggered when the screen is captured, either via screenshot or recording.
     /// </summary>
     public event EventHandler<EventArgs>? ScreenCaptured;
 
@@ -106,4 +108,26 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     }
 
     private static nint GetWindowHandle() => ((MauiWinUIWindow)Application.Current?.Windows[0].Handler.PlatformView!).WindowHandle;
+
+    #region  Disposables
+
+    public void Dispose()
+    {
+        Dispose(true);
+
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+
+        if (disposing)
+            ScreenCaptureEventHandler.ScreenCaptured -= OnScreenCaptured;
+
+        _disposed = true;
+    }
+
+    #endregion
 }
