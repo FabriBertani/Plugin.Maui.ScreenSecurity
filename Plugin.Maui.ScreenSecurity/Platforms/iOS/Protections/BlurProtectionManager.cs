@@ -7,13 +7,17 @@ internal class BlurProtectionManager
 {
     private static UIVisualEffectView? _blurBackground = null;
 
+    private static bool _enabled;
+
     internal static void HandleBlurProtection(bool enabled, ThemeStyle? style = null, UIWindow? window = null)
     {
+        _enabled = enabled;
+        
         UIApplication.Notifications.ObserveWillResignActive((sender, args) =>
         {
             try
             {
-                if (enabled)
+                if (_enabled)
                     EnableBlurScreenProtection(window, style);
                 else
                     DisableBlurScreenProtection(window);
