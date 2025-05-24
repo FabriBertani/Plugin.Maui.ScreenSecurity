@@ -23,15 +23,15 @@
     {
         ScreenSecurity.Default?.ActivateScreenSecurityProtection();
 
-        if (Application.Current?.MainPage is not null)
-            await Application.Current.MainPage.DisplayAlert("Screen Security", "Screen security enabled.", "OK");
+        if (Application.Current?.Windows[0].Page is not null)
+            await Application.Current.Windows[0].Page.DisplayAlert("Screen Security", "Screen security enabled.", "OK");
     }
 
     async Task DisableScreenSecurity()
     {
         ScreenSecurity.Default?.DeactivateScreenSecurityProtection();
 
-        if (Application.Current?.MainPage is not null)
-            await Application.Current.MainPage.DisplayAlert("Screen Security", "Screen security disabled.", "OK");
+        if (Application.Current?.Windows[0].Page is not null)
+            await Application.Current.Windows[0].Page.DisplayAlert("Screen Security", "Screen security disabled.", "OK");
     }
 }
