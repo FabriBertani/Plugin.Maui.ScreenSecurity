@@ -31,39 +31,39 @@ internal class ScreenshotProtectionManager
                 {
                     if (preventScreenshot)
                     {
-                        if (window is not null)
+                        if (window is null)
+                            return;
+                        
+                        _secureTextField = new UITextField();
+
+                        var color = IOSHelpers.GetCurrentTheme() == ThemeStyle.Light ? UIColor.White : UIColor.Black;
+
+                        _view = new UIView(window.Bounds)
                         {
-                            _secureTextField = new();
+                            BackgroundColor = color
+                        };
 
-                            var color = IOSHelpers.GetCurrentTheme() == ThemeStyle.Light ? UIColor.White : UIColor.Black;
+                        _secureTextField.SecureTextEntry = true;
 
-                            _view = new UIView(window.Bounds)
-                            {
-                                BackgroundColor = color
-                            };
+                        window.AddSubview(_secureTextField);
+                        window.AddSubview(_view);
 
-                            _secureTextField.SecureTextEntry = true;
+                        window.Layer.SuperLayer?.AddSublayer(_secureTextField.Layer);
+                        _secureTextField.Layer.Sublayers?.Last().AddSublayer(window.Layer);
 
-                            window.AddSubview(_secureTextField);
-                            window.AddSubview(_view);
-
-                            window.Layer.SuperLayer?.AddSublayer(_secureTextField.Layer);
-                            _secureTextField.Layer.Sublayers?.Last().AddSublayer(window.Layer);
-
-                            _secureTextField.LeftView = _view;
-                            _secureTextField.LeftViewMode = UITextFieldViewMode.Always;
-                        }
+                        _secureTextField.LeftView = _view;
+                        _secureTextField.LeftViewMode = UITextFieldViewMode.Always;
                     }
                     else
                     {
                         if (_secureTextField is not null)
                             _secureTextField.SecureTextEntry = false;
 
-                        if (_view is not null)
-                        {
-                            _view.Layer.RemoveFromSuperLayer();
-                            _view.RemoveFromSuperview();
-                        }
+                        if (_view is null)
+                            return;
+                        
+                        _view.Layer.RemoveFromSuperLayer();
+                        _view.RemoveFromSuperview();
                     }
                 }
                 else
@@ -85,15 +85,15 @@ internal class ScreenshotProtectionManager
                         _secureTextField.Layer.Sublayers?[0].AddSublayer(window.Layer);
                     }
 
-                    if (_secureTextField is not null)
+                    if (_secureTextField is null)
+                        return;
+                    
+                    if (preventScreenshot)
+                        _secureTextField.SecureTextEntry = preventScreenshot;
+                    else
                     {
-                        if (preventScreenshot)
-                            _secureTextField.SecureTextEntry = preventScreenshot;
-                        else
-                        {
-                            _secureTextField.SecureTextEntry = false;
-                            _secureTextField = null;
-                        }
+                        _secureTextField.SecureTextEntry = false;
+                        _secureTextField = null;
                     }
                 }
             }

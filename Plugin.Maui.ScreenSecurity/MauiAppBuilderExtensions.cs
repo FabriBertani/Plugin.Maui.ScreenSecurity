@@ -18,21 +18,23 @@ public static class MauiAppBuilderExtensions
 #if ANDROID34_0_OR_GREATER
             life.AddAndroid(android =>
             {
-                if (Build.VERSION.SdkInt >= BuildVersionCodes.UpsideDownCake)
+                if (!OperatingSystem.IsAndroidVersionAtLeast(34))
+                    return;
+                
+                CustomScreenCaptureCallback customScreenCaptureCallback = new();
+                MainThreadExecutor mainThreadExecutor = new();
+
+                android.OnStart(activity =>
                 {
-                    CustomScreenCaptureCallback _customScreenCaptureCallback = new();
-                    MainThreadExecutor _mainThreadExecutor = new();
+                    activity.RegisterScreenCaptureCallback(mainThreadExecutor, customScreenCaptureCallback);
+                });
 
-                    android.OnStart(activity =>
-                    {
-                        activity.RegisterScreenCaptureCallback(_mainThreadExecutor, _customScreenCaptureCallback);
-                    });
+                android.OnStop(activity =>
+                {
+                    activity.UnregisterScreenCaptureCallback(customScreenCaptureCallback);
+                });
 
-                    android.OnStop(activity =>
-                    {
-                        activity.UnregisterScreenCaptureCallback(_customScreenCaptureCallback);
-                    });
-                }
+                android.OnDestroy(activity => { });
             });
 #elif WINDOWS
             life.AddWindows(windows =>

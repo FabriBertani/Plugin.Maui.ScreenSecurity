@@ -39,27 +39,27 @@ internal class ImageProtectionManager
 
     private static void EnableImageScreenProtection(string image, UIWindow? window)
     {
-        if (window is not null)
+        if (window is null)
+            return;
+        
+        DisableImageScreenProtection();
+
+        if (string.IsNullOrEmpty(image))
+            return;
+
+        if (!File.Exists(image))
+            return;
+        
+        using var uiImage = new UIImage(image);
+        _screenImage = new UIImageView(UIScreen.MainScreen.Bounds)
         {
-            DisableImageScreenProtection();
+            Image = uiImage,
+            UserInteractionEnabled = false,
+            ContentMode = UIViewContentMode.ScaleAspectFill,
+            ClipsToBounds = true
+        };
 
-            if (!string.IsNullOrEmpty(image))
-            {
-                if (File.Exists(image))
-                {
-                    using var uiImage = new UIImage(image);
-                    _screenImage = new UIImageView(UIScreen.MainScreen.Bounds)
-                    {
-                        Image = uiImage,
-                        UserInteractionEnabled = false,
-                        ContentMode = UIViewContentMode.ScaleAspectFill,
-                        ClipsToBounds = true
-                    };
-
-                    window.AddSubview(_screenImage);
-                }
-            }
-        }
+        window.AddSubview(_screenImage);
     }
 
     private static void DisableImageScreenProtection()
