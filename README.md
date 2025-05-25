@@ -1,5 +1,6 @@
 # Plugin.Maui.ScreenSecurity
-[![NuGet](https://img.shields.io/nuget/v/Plugin.Maui.ScreenSecurity.svg?label=NuGet)](https://www.nuget.org/packages/Plugin.Maui.ScreenSecurity)
+[![NuGet](https://img.shields.io/nuget/v/Plugin.Maui.ScreenSecurity.svg?label=NuGet)](https://www.nuget.org/packages/Plugin.Maui.ScreenSecurity) ![NuGet Downloads](https://img.shields.io/nuget/dt/Plugin.Maui.ScreenSecurity)
+ [![Buy Me a Coffee](https://img.shields.io/badge/support-buy%20me%20a%20coffee-FFDD00)](https://buymeacoffee.com/fabribertani)
 
 `Plugin.Maui.ScreenSecurity` provides a seamless solution for preventing content exposure, as well as blocking screenshots and recordings within your .NET MAUI application
 
@@ -10,15 +11,15 @@
 |.Net MAUI iOS|iOS 14+|
 |Windows|10.0.17763+|
 
-## Version 1.2.0
+## Version 1.2.1
 
 ### What's new?
-- Added `IsProtectionEnabled` property to check if screen protection is already enabled or disabled.
-- Added `ScreenCaptured` event handler, which triggers notifications when a screenshot is taken or the screen is recorded.
-- Fixed iOS issues.
-- Added `Blazor` sample to showcase the implementation of this plugin.
+- Removed .Net7 support. :warning:
+- Added .Net9 support to all platforms.
+- Code improvements where applied.
+- Fixed issue where blur protection was not being disabled.
 
-Click [here](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/releases/tag/v1.2.0) to see the full Changelog!
+Click [here](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/releases/tag/v1.2.1) to see the full Changelog!
 
 ## Installation
 `Plugin.Maui.ScreenSecurity` is available via NuGet, grab the latest package and install it on your solution:
@@ -196,7 +197,7 @@ public partial class MainPage : ContentPage
 ```
 
 ## Sample
-Refer to the [ScreenSecuritySample](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/tree/main/samples/ScreenSecuritySample) for a comprehensive and detailed implementation of this plugin, providing you with a complete understanding of its usage.
+Refer to the [samples folder](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/tree/main/samples) for a detailed implementation of this plugin for both Maui and Blazor, which will give you a complete understanding of its usage.
 
 ## Contributions
 Please feel free to open an [Issue](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/issues) if you encounter any bugs or submit a PR to contribute improvements or fixes. Your contributions are greatly appreciated.
