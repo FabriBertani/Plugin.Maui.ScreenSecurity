@@ -15,9 +15,9 @@
 
 ### What's new?
 - Removed .Net7 support. :warning:
-- Added .Net9 support to all platforms.
-- Code improvements where applied.
-- Fixed issue where blur protection was not being disabled.
+- Added .Net9 support for all platforms.
+- Code improvements were applied.
+- Fixed an issue where blur protection was not being disabled.
 
 Click [here](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/releases/tag/v1.2.1) to see the full Changelog!
 
