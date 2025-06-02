@@ -1,6 +1,5 @@
 # Plugin.Maui.ScreenSecurity
-[![NuGet](https://img.shields.io/nuget/v/Plugin.Maui.ScreenSecurity.svg?label=NuGet)](https://www.nuget.org/packages/Plugin.Maui.ScreenSecurity) ![NuGet Downloads](https://img.shields.io/nuget/dt/Plugin.Maui.ScreenSecurity)
- [![Buy Me a Coffee](https://img.shields.io/badge/support-buy%20me%20a%20coffee-FFDD00)](https://buymeacoffee.com/fabribertani)
+[![NuGet](https://img.shields.io/nuget/v/Plugin.Maui.ScreenSecurity.svg?label=NuGet)](https://www.nuget.org/packages/Plugin.Maui.ScreenSecurity) [![NuGet Downloads](https://img.shields.io/nuget/dt/Plugin.Maui.ScreenSecurity)](https://www.nuget.org/packages/Plugin.Maui.ScreenSecurity/#versions-body-tab) [![Buy Me a Coffee](https://img.shields.io/badge/support-buy%20me%20a%20coffee-FFDD00)](https://buymeacoffee.com/fabribertani)
 
 `Plugin.Maui.ScreenSecurity` provides a seamless solution for preventing content exposure, as well as blocking screenshots and recordings within your .NET MAUI application
 
@@ -11,15 +10,17 @@
 |.Net MAUI iOS|iOS 14+|
 |Windows|10.0.17763+|
 
-## Version 1.2.1
+## Version 1.2.2
 
 ### What's new?
 - Removed .Net7 support. :warning:
 - Added .Net9 support for all platforms.
 - Code improvements were applied.
 - Fixed an issue where blur protection was not being disabled.
+- Fixed a bug that prevented samples projects from compiling.
+- Fixed package build to properly include Windows platform.
 
-Click [here](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/releases/tag/v1.2.1) to see the full Changelog!
+Click [here](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/releases/tag/v1.2.2) to see the full Changelog!
 
 ## Installation
 `Plugin.Maui.ScreenSecurity` is available via NuGet, grab the latest package and install it on your solution:

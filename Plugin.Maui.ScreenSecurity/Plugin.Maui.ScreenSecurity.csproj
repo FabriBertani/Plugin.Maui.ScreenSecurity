@@ -22,20 +22,20 @@
 		<RepositoryUrl>https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>dotnet-maui;maui;toolkit;security;Plugin.Maui.ScreenSecurity;ScreenSecurity;screen;protection;leak;android;ios</PackageTags>
-		<AssemblyVersion>1.2.1</AssemblyVersion>
-		<FileVersion>1.2.1</FileVersion>
+		<AssemblyVersion>1.2.2</AssemblyVersion>
+		<FileVersion>1.2.2</FileVersion>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<NeutralLanguage>en</NeutralLanguage>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageIcon>plugin.maui.screensecurity_128x128.jpg</PackageIcon>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<Version>1.2.1</Version>
+		<Version>1.2.2</Version>
 		<PackageReleaseNotes>https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/blob/main/CHANGELOG.md</PackageReleaseNotes>
 		<IncludeSymbols>True</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	</PropertyGroup>
-
-    <ItemGroup Condition="!($(TargetFramework.StartsWith('net')) == true AND $(TargetFramework.EndsWith('.0')) == true AND $(TargetFramework.Contains('-')) != true)">
+	
+	<ItemGroup Condition="!($(TargetFramework.StartsWith('net')) == true AND $(TargetFramework.EndsWith('.0')) == true AND $(TargetFramework.Contains('-')) != true)">
         <Compile Remove="**\*.net.cs" />
         <None Include="**\*.net.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
     </ItemGroup>
