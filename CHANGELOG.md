@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.2 (02/06/2025)
+[Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.2.1...v1.2.2)
+
+**Fixed bugs:**
+- Fixed a bug that prevented samples projects from compiling.
+- Fixed package build to properly include Windows platform.
+
 ## 1.2.1 (25/05/2025)
 [Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.2.0...v1.2.1)
 
