@@ -157,9 +157,30 @@ partial class ScreenSecurityImplementation : IScreenSecurity, IDisposable
         });
     }
 
+    /// <summary>
+    /// Ensures that <c>_window</c> is initialized with the current UIWindow instance.
+    /// If called from the main thread, the window is set synchronously.
+    /// If called from a background thread, the assignment is dispatched asynchronously to the main thread.
+    /// <para><b>Note:</b> If you call this method from a background thread, <c>_window</c> may not be immediately available
+    /// after the call returns, as the assignment happens asynchronously. Any code that depends on <c>_window</c>
+    /// being set should either ensure it runs on the main thread or handle the possibility that <c>_window</c> is still null.</para>
+    /// </summary>
     private void GetWindow()
     {
-        _window ??= IOSHelpers.GetWindow();
+        if (_window is not null)
+            return;
+
+        if (MainThread.IsMainThread)
+        {
+            _window = IOSHelpers.GetWindow();
+        }
+        else
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                _window ??= IOSHelpers.GetWindow();
+            });
+        }
     }
 
     private void OnScreenCaptured(object? sender, EventArgs e)
@@ -185,17 +206,11 @@ partial class ScreenSecurityImplementation : IScreenSecurity, IDisposable
         {
             ScreenCaptureEventHandler.ScreenCaptured -= OnScreenCaptured;
 
-            if (_screenshotObserver is not null)
-            {
-                _screenshotObserver.Dispose();
-                _screenshotObserver = null;
-            }
+            _screenshotObserver?.Dispose();
+            _screenshotObserver = null;
 
-            if (_screenCapturedObserver is not null)
-            {
-                _screenCapturedObserver.Dispose();
-                _screenCapturedObserver = null;
-            }
+            _screenCapturedObserver?.Dispose();
+            _screenCapturedObserver = null;
         }
 
         _disposed = true;

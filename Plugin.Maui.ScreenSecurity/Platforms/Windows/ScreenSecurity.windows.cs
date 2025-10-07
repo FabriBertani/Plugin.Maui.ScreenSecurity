@@ -12,6 +12,12 @@ partial class ScreenSecurityImplementation : IScreenSecurity, IDisposable
     private const uint WDA_NONE = 0;
     private const uint WDA_MONITOR = 1;
 
+#if NET9_0_OR_GREATER
+    private static readonly Lock _stateLock = new();
+#else
+    private static readonly object _stateLock = new();
+#endif
+
     public ScreenSecurityImplementation()
     {
         ScreenCaptureEventHandler.ScreenCaptured += OnScreenCaptured;
@@ -29,7 +35,20 @@ partial class ScreenSecurityImplementation : IScreenSecurity, IDisposable
     /// </summary>
     public void ActivateScreenSecurityProtection()
     {
-        SetScreenshotProtection(true);
+#if NET9_0_OR_GREATER
+        lock (_stateLock)
+#else
+        lock (_stateLock)
+#endif
+        {
+            if (IsProtectionEnabled)
+                return;
+
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                SetScreenshotProtection(true);
+            });
+        }
     }
 
     /// <summary>
@@ -72,7 +91,20 @@ partial class ScreenSecurityImplementation : IScreenSecurity, IDisposable
     /// </summary>
     public void DeactivateScreenSecurityProtection()
     {
-        SetScreenshotProtection(false);
+#if NET9_0_OR_GREATER
+        lock (_stateLock)
+#else
+        lock (_stateLock)
+#endif
+        {
+            if (!IsProtectionEnabled)
+                return;
+
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                SetScreenshotProtection(false);
+            });
+        }
     }
 
     /// <summary>
@@ -107,7 +139,19 @@ partial class ScreenSecurityImplementation : IScreenSecurity, IDisposable
         ScreenCaptured?.Invoke(this, EventArgs.Empty);
     }
 
-    private static nint GetWindowHandle() => ((MauiWinUIWindow)Application.Current?.Windows[0].Handler.PlatformView!).WindowHandle;
+    private static nint GetWindowHandle()
+    {
+        if (!MainThread.IsMainThread)
+            throw new InvalidOperationException("GetWindowHandle must be called on the main (UI) thread.");
+
+        var window = Application.Current?.Windows.Count > 0
+            ? Application.Current?.Windows[0]
+            : null;
+
+        var platformView = window?.Handler.PlatformView as MauiWinUIWindow;
+
+        return platformView?.WindowHandle ?? IntPtr.Zero;
+    }
 
     #region  Disposables
 

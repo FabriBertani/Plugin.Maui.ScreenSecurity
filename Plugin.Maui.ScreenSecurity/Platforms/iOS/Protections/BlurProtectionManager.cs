@@ -1,44 +1,79 @@
-﻿using Plugin.Maui.ScreenSecurity.Handlers;
+﻿using Foundation;
+using Plugin.Maui.ScreenSecurity.Handlers;
 using UIKit;
 
 namespace Plugin.Maui.ScreenSecurity.Platforms.iOS;
 
 internal class BlurProtectionManager
 {
-    private static UIVisualEffectView? _blurBackground = null;
+#if NET9_0_OR_GREATER
+    private static readonly Lock _lock = new();
+#else
+    private static readonly object _lock = new();
+#endif
 
     private static bool _enabled;
 
+    private static NSObject? _willResignActiveObserver;
+    private static NSObject? _didBecomeActiveObserver;
+
+    private static UIVisualEffectView? _blurBackground = null;
+
     internal static void HandleBlurProtection(bool enabled, ThemeStyle? style = null, UIWindow? window = null)
     {
-        _enabled = enabled;
-        
-        UIApplication.Notifications.ObserveWillResignActive((sender, args) =>
+#if NET9_0_OR_GREATER
+        lock (_lock)
+#else
+        lock (_lock)
+#endif
         {
-            try
+            // If state hasn't changed and observers are already set, skip re-subscribing
+            if (_enabled == enabled
+                    && _willResignActiveObserver is not null
+                    && _didBecomeActiveObserver is not null)
             {
-                if (_enabled)
-                    EnableBlurScreenProtection(window, style);
-                else
-                    DisableBlurScreenProtection(window);
+                return;
             }
-            catch (Exception ex)
-            {
-                ErrorsHandler.HandleException(nameof(HandleBlurProtection), ex);
-            }
-        });
 
-        UIApplication.Notifications.ObserveDidBecomeActive((sender, args) =>
-        {
-            try
+            _enabled = enabled;
+
+            // Remove existing observers before re-adding
+            DisposeObservers();
+
+
+            _willResignActiveObserver = UIApplication.Notifications.ObserveWillResignActive((sender, args) =>
             {
-                DisableBlurScreenProtection(window);
-            }
-            catch (Exception ex)
+                try
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        if (_enabled)
+                            EnableBlurScreenProtection(window, style);
+                        else
+                            DisableBlurScreenProtection(window);
+                    });
+                }
+                catch (Exception ex)
+                {
+                    ErrorsHandler.HandleException(nameof(HandleBlurProtection), ex);
+                }
+            });
+
+            _didBecomeActiveObserver = UIApplication.Notifications.ObserveDidBecomeActive((sender, args) =>
             {
-                ErrorsHandler.HandleException(nameof(HandleBlurProtection), ex);
-            }
-        });
+                try
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        DisableBlurScreenProtection(window);
+                    });
+                }
+                catch (Exception ex)
+                {
+                    ErrorsHandler.HandleException(nameof(HandleBlurProtection), ex);
+                }
+            });
+        }
     }
 
     internal static void EnableBlur(UIWindow? window, ThemeStyle style)
@@ -69,36 +104,51 @@ internal class BlurProtectionManager
     {
         if (window is null)
             return;
-        
-        var blurEffectStyle = style switch
+
+        MainThread.BeginInvokeOnMainThread(() =>
         {
-            ThemeStyle.Light => UIBlurEffectStyle.Light,
-            _ => UIBlurEffectStyle.Dark
-        };
+            var blurEffectStyle = style switch
+            {
+                ThemeStyle.Light => UIBlurEffectStyle.Light,
+                _ => UIBlurEffectStyle.Dark
+            };
 
-        using var blurEffect = UIBlurEffect.FromStyle(blurEffectStyle);
+            using var blurEffect = UIBlurEffect.FromStyle(blurEffectStyle);
 
-        _blurBackground = new UIVisualEffectView(blurEffect)
-        {
-            Frame = window.Frame
-        };
+            _blurBackground = new UIVisualEffectView(blurEffect)
+            {
+                Frame = window.Frame
+            };
 
-        window.AddSubview(_blurBackground);
+            window.AddSubview(_blurBackground);
+        });
     }
 
     private static void DisableBlurScreenProtection(UIWindow? window)
     {
         if (window is null)
             return;
-        
-        foreach (var subview in window.Subviews)
+
+        MainThread.BeginInvokeOnMainThread(() =>
         {
-            if (subview is UIVisualEffectView)
+            foreach (var subview in window.Subviews)
             {
-                subview.RemoveFromSuperview();
+                if (subview is UIVisualEffectView)
+                {
+                    subview.RemoveFromSuperview();
+                }
             }
-        }
-        
-        _blurBackground = null;
+
+            _blurBackground = null;
+        });
+    }
+
+    private static void DisposeObservers()
+    {
+        _willResignActiveObserver?.Dispose();
+        _willResignActiveObserver = null;
+
+        _didBecomeActiveObserver?.Dispose();
+        _didBecomeActiveObserver = null;
     }
 }
