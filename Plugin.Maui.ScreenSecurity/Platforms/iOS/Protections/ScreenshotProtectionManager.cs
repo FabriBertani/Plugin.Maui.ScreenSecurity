@@ -1,5 +1,4 @@
-﻿using Foundation;
-using Plugin.Maui.ScreenSecurity.Handlers;
+﻿using Plugin.Maui.ScreenSecurity.Handlers;
 using UIKit;
 
 namespace Plugin.Maui.ScreenSecurity.Platforms.iOS;
@@ -23,7 +22,7 @@ internal class ScreenshotProtectionManager
 
     private static void SetScreenshotProtection(bool preventScreenshot, UIWindow? window)
     {
-        NSRunLoop.Main.BeginInvokeOnMainThread(() =>
+        MainThread.BeginInvokeOnMainThread(() =>
         {
             try
             {
@@ -33,7 +32,7 @@ internal class ScreenshotProtectionManager
                     {
                         if (window is null)
                             return;
-                        
+
                         _secureTextField = new UITextField();
 
                         var color = IOSHelpers.GetCurrentTheme() == ThemeStyle.Light ? UIColor.White : UIColor.Black;
@@ -61,7 +60,7 @@ internal class ScreenshotProtectionManager
 
                         if (_view is null)
                             return;
-                        
+
                         _view.Layer.RemoveFromSuperLayer();
                         _view.RemoveFromSuperview();
                     }
@@ -87,7 +86,7 @@ internal class ScreenshotProtectionManager
 
                     if (_secureTextField is null)
                         return;
-                    
+
                     if (preventScreenshot)
                         _secureTextField.SecureTextEntry = preventScreenshot;
                     else

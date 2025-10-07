@@ -1,40 +1,78 @@
-﻿using Plugin.Maui.ScreenSecurity.Handlers;
+﻿using Foundation;
+using Plugin.Maui.ScreenSecurity.Handlers;
 using UIKit;
 
 namespace Plugin.Maui.ScreenSecurity.Platforms.iOS;
 
 internal class ColorProtectionManager
 {
+#if NET9_0_OR_GREATER
+    private static readonly Lock _lock = new();
+#else
+    private static readonly object _lock = new();
+#endif
+
+    private static bool _enabled;
+
+    private static NSObject? _willResignActiveObserver;
+    private static NSObject? _didBecomeActiveObserver;
+
     private static UIView? _screenColor = null;
 
     internal static void HandleColorProtection(bool enabled, string hexColor = "", UIWindow? window = null)
     {
-        UIApplication.Notifications.ObserveWillResignActive((sender, args) =>
+#if NET9_0_OR_GREATER
+        lock (_lock)
+#else
+        lock (_lock)
+#endif
         {
-            try
+            // If state hasn't changed and observers are already set, skip re-subscribing
+            if (_enabled == enabled
+                    && _willResignActiveObserver is not null
+                    && _didBecomeActiveObserver is not null)
             {
-                if (enabled)
-                    EnableColorScreenProtection(window, hexColor);
-                else
-                    DisableColorScreenProtection();
+                return;
             }
-            catch (Exception ex)
-            {
-                ErrorsHandler.HandleException(nameof(HandleColorProtection), ex);
-            }
-        });
 
-        UIApplication.Notifications.ObserveDidBecomeActive((sender, args) =>
-        {
-            try
+            _enabled = enabled;
+
+            // Remove existing observers before re-adding
+            DisposeObservers();
+
+            _willResignActiveObserver = UIApplication.Notifications.ObserveWillResignActive((sender, args) =>
             {
-                DisableColorScreenProtection();
-            }
-            catch (Exception ex)
+                try
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        if (enabled)
+                            EnableColorScreenProtection(window, hexColor);
+                        else
+                            DisableColorScreenProtection();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    ErrorsHandler.HandleException(nameof(HandleColorProtection), ex);
+                }
+            });
+
+            _didBecomeActiveObserver = UIApplication.Notifications.ObserveDidBecomeActive((sender, args) =>
             {
-                ErrorsHandler.HandleException(nameof(HandleColorProtection), ex);
-            }
-        });
+                try
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        DisableColorScreenProtection();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    ErrorsHandler.HandleException(nameof(HandleColorProtection), ex);
+                }
+            });
+        }
     }
 
     internal static void EnableColor(UIWindow? window, string hexColor)
@@ -65,19 +103,34 @@ internal class ColorProtectionManager
     {
         if (window is null)
             return;
-        
-        _screenColor = new UIView(window.Bounds)
-        {
-            BackgroundColor = UIColor.Clear.FromHex(hexColor)
-        };
 
-        window.AddSubview(_screenColor);
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            _screenColor = new UIView(window.Bounds)
+            {
+                BackgroundColor = UIColor.Clear.FromHex(hexColor)
+            };
+
+            window.AddSubview(_screenColor);
+        });
     }
 
     private static void DisableColorScreenProtection()
     {
-        _screenColor?.RemoveFromSuperview();
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            _screenColor?.RemoveFromSuperview();
 
-        _screenColor = null;
+            _screenColor = null;
+        });
+    }
+
+    private static void DisposeObservers()
+    {
+        _willResignActiveObserver?.Dispose();
+        _willResignActiveObserver = null;
+
+        _didBecomeActiveObserver?.Dispose();
+        _didBecomeActiveObserver = null;
     }
 }
