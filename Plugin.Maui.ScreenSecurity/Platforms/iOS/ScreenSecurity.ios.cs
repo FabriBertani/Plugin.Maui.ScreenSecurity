@@ -5,7 +5,7 @@ using UIKit;
 
 namespace Plugin.Maui.ScreenSecurity;
 
-partial class ScreenSecurityImplementation : IScreenSecurity, IDisposable
+internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposable
 {
     private UIWindow? _window;
 
@@ -35,7 +35,7 @@ partial class ScreenSecurityImplementation : IScreenSecurity, IDisposable
 
         EnableScreenCapturedEvent();
 
-        BlurProtectionManager.HandleBlurProtection(true, IOSHelpers.GetCurrentTheme(), _window);
+        BlurProtectionManager.HandleBlurProtection(true, ThrowErrors, IOSHelpers.GetCurrentTheme(), _window);
 
         HandleScreenCaptureProtection(true, true);
 
@@ -61,7 +61,7 @@ partial class ScreenSecurityImplementation : IScreenSecurity, IDisposable
         EnableScreenCapturedEvent();
 
         if (blurScreenProtection)
-            BlurProtectionManager.HandleBlurProtection(true, IOSHelpers.GetCurrentTheme(), _window);
+            BlurProtectionManager.HandleBlurProtection(true, ThrowErrors, IOSHelpers.GetCurrentTheme(), _window);
 
         HandleScreenCaptureProtection(preventScreenshot, preventScreenRecording);
 
@@ -91,17 +91,31 @@ partial class ScreenSecurityImplementation : IScreenSecurity, IDisposable
             && string.IsNullOrEmpty(screenProtectionOptions.Image))
         {
             if (screenProtectionOptions.HexColor.IsHexColor())
-                ColorProtectionManager.HandleColorProtection(true, screenProtectionOptions.HexColor, _window);
+                ColorProtectionManager.HandleColorProtection(true, ThrowErrors, screenProtectionOptions.HexColor, _window);
             else
-                throw new ArgumentException($"{screenProtectionOptions.HexColor} is not a valid hexadecimal color.");
+            {
+                var invalidHexadecimalColorMessage = $"{screenProtectionOptions.HexColor} is not a valid hexadecimal color.";
+
+                System.Diagnostics.Trace.TraceError(invalidHexadecimalColorMessage);
+
+                if (ThrowErrors)
+                    throw new ArgumentException(invalidHexadecimalColorMessage);
+            }
         }
         else if (!string.IsNullOrEmpty(screenProtectionOptions.Image)
             && string.IsNullOrEmpty(screenProtectionOptions.HexColor))
         {
             if (screenProtectionOptions.Image.IsValidImage())
-                ImageProtectionManager.HandleImageProtection(true, screenProtectionOptions.Image, _window);
+                ImageProtectionManager.HandleImageProtection(true, ThrowErrors, screenProtectionOptions.Image, _window);
             else
-                throw new ArgumentException($"{screenProtectionOptions.Image} is not a valid image format.");
+            {
+                var invalidImageFormatMessage = $"{screenProtectionOptions.Image} is not a valid image format.";
+
+                System.Diagnostics.Trace.TraceError(invalidImageFormatMessage);
+
+                if (ThrowErrors)
+                    throw new ArgumentException(invalidImageFormatMessage);
+            }
         }
 
         HandleScreenCaptureProtection(screenProtectionOptions.PreventScreenshot, screenProtectionOptions.PreventScreenRecording);
@@ -114,15 +128,15 @@ partial class ScreenSecurityImplementation : IScreenSecurity, IDisposable
     /// </summary>
     public void DeactivateScreenSecurityProtection()
     {
-        BlurProtectionManager.HandleBlurProtection(false);
+        BlurProtectionManager.HandleBlurProtection(false, ThrowErrors);
 
-        ColorProtectionManager.HandleColorProtection(false);
+        ColorProtectionManager.HandleColorProtection(false, ThrowErrors);
 
-        ImageProtectionManager.HandleImageProtection(false);
+        ImageProtectionManager.HandleImageProtection(false, ThrowErrors);
 
-        ScreenRecordingProtectionManager.HandleScreenRecordingProtection(false);
+        ScreenRecordingProtectionManager.HandleScreenRecordingProtection(false, ThrowErrors);
 
-        ScreenshotProtectionManager.HandleScreenshotProtection(false);
+        ScreenshotProtectionManager.HandleScreenshotProtection(false, ThrowErrors);
 
         IsProtectionEnabled = false;
     }
@@ -133,15 +147,20 @@ partial class ScreenSecurityImplementation : IScreenSecurity, IDisposable
     public bool IsProtectionEnabled { get; private set; }
 
     /// <summary>
+    /// If set to true, exceptions will be thrown when an error occurs.
+    /// </summary>
+    public bool ThrowErrors { get; set; }
+
+    /// <summary>
     /// Triggered when the screen is captured, either via screenshot or recording.
     /// </summary>
     public event EventHandler<EventArgs>? ScreenCaptured;
 
     private void HandleScreenCaptureProtection(bool preventScreenshot, bool preventScreenRecording)
     {
-        ScreenshotProtectionManager.HandleScreenshotProtection(preventScreenshot, _window);
+        ScreenshotProtectionManager.HandleScreenshotProtection(preventScreenshot, ThrowErrors, _window);
 
-        ScreenRecordingProtectionManager.HandleScreenRecordingProtection(preventScreenRecording, string.Empty, _window);
+        ScreenRecordingProtectionManager.HandleScreenRecordingProtection(preventScreenRecording, ThrowErrors, string.Empty, _window);
     }
 
     private void EnableScreenCapturedEvent()

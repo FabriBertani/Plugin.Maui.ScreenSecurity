@@ -1,6 +1,6 @@
 ﻿namespace Plugin.Maui.ScreenSecurity;
 
-partial class ScreenSecurityImplementation : IScreenSecurity
+internal partial class ScreenSecurityImplementation : IScreenSecurity
 {
     public void ActivateScreenSecurityProtection()
     {
@@ -23,6 +23,8 @@ partial class ScreenSecurityImplementation : IScreenSecurity
     }
 
     public bool IsProtectionEnabled { get; private set; }
+
+    public bool ThrowErrors { get; set; }
 
     public event EventHandler<EventArgs>? ScreenCaptured;
 }

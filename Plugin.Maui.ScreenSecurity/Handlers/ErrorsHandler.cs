@@ -1,12 +1,22 @@
-﻿namespace Plugin.Maui.ScreenSecurity.Handlers;
+﻿using System.Runtime.ExceptionServices;
+
+namespace Plugin.Maui.ScreenSecurity.Handlers;
 
 internal static class ErrorsHandler
 {
-    internal static void HandleException(string methodName, Exception ex)
+    internal static void HandleException(string methodName, bool throwErrors, Exception ex)
     {
-        Console.WriteLine($"{methodName} failed with Exception message: {ex.Message}");
-        Console.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
+        System.Diagnostics.Trace.WriteLine($"{methodName} failed with Exception message: {ex.Message}");
+        System.Diagnostics.Trace.WriteLine($"Exception Stacktrace: {ex.StackTrace}");
         if (ex.InnerException is not null)
-            Console.WriteLine($"With InnerException: {ex.InnerException}");
+            System.Diagnostics.Trace.WriteLine($"With InnerException: {ex.InnerException}");
+
+        if (throwErrors)
+        {
+            ExceptionDispatchInfo.Capture(ex).Throw();
+
+            // Keep an explicit return so the compiler knows this code path doesn't continue.
+            return;
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Plugin.Maui.ScreenSecurity.Platforms.iOS;
 
-public enum ThemeStyle
+internal enum ThemeStyle
 {
     Light,
     Dark

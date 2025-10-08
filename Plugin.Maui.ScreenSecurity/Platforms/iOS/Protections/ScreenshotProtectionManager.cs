@@ -8,19 +8,19 @@ internal class ScreenshotProtectionManager
     private static UITextField? _secureTextField = null;
     private static UIView? _view = null;
 
-    internal static void HandleScreenshotProtection(bool enabled, UIWindow? window = null)
+    internal static void HandleScreenshotProtection(bool enabled, bool throwErrors, UIWindow? window = null)
     {
         try
         {
-            SetScreenshotProtection(enabled, window);
+            SetScreenshotProtection(enabled, throwErrors, window);
         }
         catch (Exception ex)
         {
-            ErrorsHandler.HandleException(nameof(HandleScreenshotProtection), ex);
+            ErrorsHandler.HandleException(nameof(HandleScreenshotProtection), throwErrors, ex);
         }
     }
 
-    private static void SetScreenshotProtection(bool preventScreenshot, UIWindow? window)
+    private static void SetScreenshotProtection(bool preventScreenshot, bool throwErrors, UIWindow? window)
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
@@ -98,7 +98,7 @@ internal class ScreenshotProtectionManager
             }
             catch (Exception ex)
             {
-                ErrorsHandler.HandleException(nameof(SetScreenshotProtection), ex);
+                ErrorsHandler.HandleException(nameof(SetScreenshotProtection), throwErrors, ex);
             }
         });
     }

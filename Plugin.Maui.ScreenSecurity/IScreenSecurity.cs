@@ -53,6 +53,11 @@ public interface IScreenSecurity
     bool IsProtectionEnabled { get; }
 
     /// <summary>
+    /// If set to true, exceptions will be thrown when an error occurs.
+    /// </summary>
+    bool ThrowErrors { set; }
+
+    /// <summary>
     /// Triggered when the screen is captured, either via screenshot or recording.
     /// </summary>
     event EventHandler<EventArgs>? ScreenCaptured;

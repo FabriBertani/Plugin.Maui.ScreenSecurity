@@ -19,7 +19,7 @@ internal class ImageProtectionManager
 
     private static UIImageView? _screenImage = null;
 
-    internal static void HandleImageProtection(bool enabled, string image = "", UIWindow? window = null)
+    internal static void HandleImageProtection(bool enabled, bool throwErrors, string image = "", UIWindow? window = null)
     {
 #if NET9_0_OR_GREATER
         lock (_lock)
@@ -54,7 +54,7 @@ internal class ImageProtectionManager
                 }
                 catch (Exception ex)
                 {
-                    ErrorsHandler.HandleException(nameof(HandleImageProtection), ex);
+                    ErrorsHandler.HandleException(nameof(HandleImageProtection), throwErrors, ex);
                 }
             });
 
@@ -69,7 +69,7 @@ internal class ImageProtectionManager
                 }
                 catch (Exception ex)
                 {
-                    ErrorsHandler.HandleException(nameof(HandleImageProtection), ex);
+                    ErrorsHandler.HandleException(nameof(HandleImageProtection), throwErrors, ex);
                 }
             });
         }
