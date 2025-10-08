@@ -1,5 +1,6 @@
 ﻿using Plugin.Maui.ScreenSecurity.Handlers;
 using Plugin.Maui.ScreenSecurity.Platforms.Windows;
+using System.Runtime.InteropServices;
 
 using Application = Microsoft.Maui.Controls.Application;
 
@@ -9,8 +10,11 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
 {
     private bool _disposed;
 
-    private const uint WDA_NONE = 0;
-    private const uint WDA_MONITOR = 1;
+    private const uint WDA_NONE = 0x00000000;
+    private const uint WDA_MONITOR = 0x00000001;
+
+    // Windows 10, version 2004 and later
+    private const uint WDA_EXCLUDEFROMCAPTURE = 0x00000011;
 
 #if NET9_0_OR_GREATER
     private static readonly Lock _stateLock = new();
@@ -47,6 +51,8 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 SetScreenshotProtection(true);
+
+                NativeMethods.SetHook(NativeMethods.Proc);
             });
         }
     }
@@ -103,6 +109,8 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 SetScreenshotProtection(false);
+
+                NativeMethods.Unhook();
             });
         }
     }
@@ -128,8 +136,26 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
         {
             var hwnd = GetWindowHandle();
 
-            if (hwnd != IntPtr.Zero)
-                _ = NativeMethods.SetWindowDisplayAffinity(hwnd, enabled ? WDA_MONITOR : WDA_NONE);
+            if (hwnd == IntPtr.Zero)
+            {
+                System.Diagnostics.Trace.TraceWarning("SetScreenshotProtection: Window handle not available.");
+
+                IsProtectionEnabled = enabled;
+
+                return;
+            }
+
+            if (enabled)
+            {
+                if (!ApplyAffinity(hwnd, WDA_EXCLUDEFROMCAPTURE))
+                {
+                    System.Diagnostics.Trace.TraceInformation("WDA_EXCLUDEFROMCAPTURE not supported; falling back to WDA_MONITOR.");
+
+                    ApplyAffinity(hwnd, WDA_MONITOR);
+                }
+            }
+            else
+                ApplyAffinity(hwnd, WDA_NONE);
 
             IsProtectionEnabled = enabled;
         }
@@ -139,7 +165,23 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
         }
     }
 
-    private void OnScreenCaptured(object sender, EventArgs e)
+    private static bool ApplyAffinity(IntPtr hwnd, uint affinity)
+    {
+        uint result = NativeMethods.SetWindowDisplayAffinity(hwnd, affinity);
+
+        if (result == 0)
+        {
+            int err = Marshal.GetLastWin32Error();
+
+            System.Diagnostics.Trace.TraceError($"SetWindowDisplayAffinity failed (Affinity=0x{affinity:X}). Win32Error={err}");
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private void OnScreenCaptured(object? sender, EventArgs e)
     {
         ScreenCaptured?.Invoke(this, EventArgs.Empty);
     }
