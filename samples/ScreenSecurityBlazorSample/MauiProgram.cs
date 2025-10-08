@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Plugin.Maui.ScreenSecurity;
 
 namespace ScreenSecurityBlazorSample
 {
@@ -12,7 +13,8 @@ namespace ScreenSecurityBlazorSample
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                });
+                })
+                .UseScreenSecurity();
 
             builder.Services.AddMauiBlazorWebView();
 
