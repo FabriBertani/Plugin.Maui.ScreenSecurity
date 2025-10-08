@@ -19,7 +19,7 @@ internal class BlurProtectionManager
 
     private static UIVisualEffectView? _blurBackground = null;
 
-    internal static void HandleBlurProtection(bool enabled, ThemeStyle? style = null, UIWindow? window = null)
+    internal static void HandleBlurProtection(bool enabled, bool throwErrors, ThemeStyle? style = null, UIWindow? window = null)
     {
 #if NET9_0_OR_GREATER
         lock (_lock)
@@ -55,7 +55,7 @@ internal class BlurProtectionManager
                 }
                 catch (Exception ex)
                 {
-                    ErrorsHandler.HandleException(nameof(HandleBlurProtection), ex);
+                    ErrorsHandler.HandleException(nameof(HandleBlurProtection), throwErrors, ex);
                 }
             });
 
@@ -70,13 +70,13 @@ internal class BlurProtectionManager
                 }
                 catch (Exception ex)
                 {
-                    ErrorsHandler.HandleException(nameof(HandleBlurProtection), ex);
+                    ErrorsHandler.HandleException(nameof(HandleBlurProtection), throwErrors, ex);
                 }
             });
         }
     }
 
-    internal static void EnableBlur(UIWindow? window, ThemeStyle style)
+    internal static void EnableBlur(UIWindow? window, ThemeStyle style, bool throwErrors)
     {
         try
         {
@@ -84,11 +84,11 @@ internal class BlurProtectionManager
         }
         catch (Exception ex)
         {
-            ErrorsHandler.HandleException(nameof(EnableBlur), ex);
+            ErrorsHandler.HandleException(nameof(EnableBlur), throwErrors, ex);
         }
     }
 
-    internal static void DisableBlur(UIWindow? window)
+    internal static void DisableBlur(UIWindow? window, bool throwErrors)
     {
         try
         {
@@ -96,7 +96,7 @@ internal class BlurProtectionManager
         }
         catch (Exception ex)
         {
-            ErrorsHandler.HandleException(nameof(DisableBlur), ex);
+            ErrorsHandler.HandleException(nameof(DisableBlur), throwErrors, ex);
         }
     }
 

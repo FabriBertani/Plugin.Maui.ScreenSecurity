@@ -20,7 +20,7 @@ public static class MauiAppBuilderExtensions
             {
                 if (!OperatingSystem.IsAndroidVersionAtLeast(34))
                     return;
-                
+
                 CustomScreenCaptureCallback customScreenCaptureCallback = new();
                 MainThreadExecutor mainThreadExecutor = new();
 
@@ -44,7 +44,7 @@ public static class MauiAppBuilderExtensions
                     var mainWindow = Application.Current?.Windows[0];
                     var nativeWindow = mainWindow?.Handler?.PlatformView as MauiWinUIWindow;
 
-                    NativeMethods._hookID = NativeMethods.SetHook(NativeMethods._proc);
+                    NativeMethods.HookID = NativeMethods.SetHook(NativeMethods.Proc);
 
                     if (nativeWindow is not null)
                     {
@@ -60,11 +60,13 @@ public static class MauiAppBuilderExtensions
 
                 windows.OnClosed((app, args) =>
                 {
-                    NativeMethods.UnhookWindowsHookEx(NativeMethods._hookID);
+                    NativeMethods.UnhookWindowsHookEx(NativeMethods.HookID);
                 });
             });
 #endif
         });
+
+        builder.Services.AddSingleton<IScreenSecurity>(ScreenSecurity.Default);
 
         return builder;
     }

@@ -19,7 +19,7 @@ internal class ColorProtectionManager
 
     private static UIView? _screenColor = null;
 
-    internal static void HandleColorProtection(bool enabled, string hexColor = "", UIWindow? window = null)
+    internal static void HandleColorProtection(bool enabled, bool throwErrors, string hexColor = "", UIWindow? window = null)
     {
 #if NET9_0_OR_GREATER
         lock (_lock)
@@ -54,7 +54,7 @@ internal class ColorProtectionManager
                 }
                 catch (Exception ex)
                 {
-                    ErrorsHandler.HandleException(nameof(HandleColorProtection), ex);
+                    ErrorsHandler.HandleException(nameof(HandleColorProtection), throwErrors, ex);
                 }
             });
 
@@ -69,13 +69,13 @@ internal class ColorProtectionManager
                 }
                 catch (Exception ex)
                 {
-                    ErrorsHandler.HandleException(nameof(HandleColorProtection), ex);
+                    ErrorsHandler.HandleException(nameof(HandleColorProtection), throwErrors, ex);
                 }
             });
         }
     }
 
-    internal static void EnableColor(UIWindow? window, string hexColor)
+    internal static void EnableColor(UIWindow? window, string hexColor, bool throwErrors)
     {
         try
         {
@@ -83,11 +83,11 @@ internal class ColorProtectionManager
         }
         catch (Exception ex)
         {
-            ErrorsHandler.HandleException(nameof(EnableColor), ex);
+            ErrorsHandler.HandleException(nameof(EnableColor), throwErrors, ex);
         }
     }
 
-    internal static void DisableColor()
+    internal static void DisableColor(bool throwErrors)
     {
         try
         {
@@ -95,7 +95,7 @@ internal class ColorProtectionManager
         }
         catch (Exception ex)
         {
-            ErrorsHandler.HandleException(nameof(DisableColor), ex);
+            ErrorsHandler.HandleException(nameof(DisableColor), throwErrors, ex);
         }
     }
 

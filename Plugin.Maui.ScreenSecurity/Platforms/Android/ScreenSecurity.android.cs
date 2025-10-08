@@ -3,7 +3,7 @@ using Plugin.Maui.ScreenSecurity.Handlers;
 
 namespace Plugin.Maui.ScreenSecurity;
 
-partial class ScreenSecurityImplementation : IScreenSecurity, IDisposable
+internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposable
 {
     private bool _disposed;
 
@@ -93,7 +93,7 @@ partial class ScreenSecurityImplementation : IScreenSecurity, IDisposable
             }
             catch (Exception ex)
             {
-                ErrorsHandler.HandleException(nameof(SetScreenSecurityProtection), ex);
+                ErrorsHandler.HandleException(nameof(SetScreenSecurityProtection), ThrowErrors, ex);
             }
         });
     }
@@ -107,6 +107,11 @@ partial class ScreenSecurityImplementation : IScreenSecurity, IDisposable
     /// Indicates whether screen protection is currently enabled.
     /// </summary>
     public bool IsProtectionEnabled { get; private set; }
+
+    /// <summary>
+    /// If set to true, exceptions will be thrown when an error occurs.
+    /// </summary>
+    public bool ThrowErrors { get; set; }
 
     /// <summary>
     /// Triggered when the screen is captured, either via screenshot or recording.
