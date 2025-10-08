@@ -40,7 +40,6 @@ internal class BlurProtectionManager
             // Remove existing observers before re-adding
             DisposeObservers();
 
-
             _willResignActiveObserver = UIApplication.Notifications.ObserveWillResignActive((sender, args) =>
             {
                 try
