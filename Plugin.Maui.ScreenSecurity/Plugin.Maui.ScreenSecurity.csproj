@@ -3,33 +3,38 @@
 	<PropertyGroup>
         <TargetFrameworks>net8.0;net8.0-android;net8.0-ios;net9.0;net9.0-android;net9.0-ios</TargetFrameworks>
         <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0;net9.0-windows10.0.19041.0</TargetFrameworks>
-		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<SkipValidateMauiImplicitPackageReferences>true</SkipValidateMauiImplicitPackageReferences>
+		<Nullable>enable</Nullable>
+		<UseMaui>true</UseMaui>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
         <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
-		<Nullable>enable</Nullable>
+
+		<!-- NuGet -->
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<DebugType>portable</DebugType>
+		<IsPackable>True</IsPackable>
 		<Title>Plugin.Maui.ScreenSecurity</Title>
 		<Authors>FabriBertani</Authors>
 		<Description>Safeguard your .NET MAUI app effortlessly by preventing content exposure, screenshots, and recordings with ease.</Description>
 		<Copyright>Copyright 2025 Fabricio Bertani</Copyright>
 		<PackageProjectUrl>https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity</RepositoryUrl>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>dotnet-maui;maui;toolkit;security;Plugin.Maui.ScreenSecurity;ScreenSecurity;screen;protection;leak;android;ios</PackageTags>
-		<AssemblyVersion>1.2.2</AssemblyVersion>
-		<FileVersion>1.2.2</FileVersion>
+		<AssemblyVersion>1.2.3</AssemblyVersion>
+		<FileVersion>1.2.3</FileVersion>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<NeutralLanguage>en</NeutralLanguage>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<PackageIcon>plugin.maui.screensecurity_128x128.jpg</PackageIcon>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<Version>1.2.2</Version>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<PackageIcon>plugin.maui.screensecurity_128x128.png</PackageIcon>
+		<Version>1.2.3</Version>
 		<PackageReleaseNotes>https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/blob/main/CHANGELOG.md</PackageReleaseNotes>
 		<IncludeSymbols>True</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -53,7 +58,7 @@
       <None Remove="Platforms\Android\Helpers\" />
     </ItemGroup>
 	<ItemGroup>
-	  <None Include="..\Assets\plugin.maui.screensecurity_128x128.jpg">
+	  <None Include="..\Assets\plugin.maui.screensecurity_128x128.png">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
