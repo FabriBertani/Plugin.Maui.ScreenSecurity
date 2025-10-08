@@ -1,31 +1,34 @@
+![](Assets/plugin.maui.screensecurity_128x128.png)
+
 # Plugin.Maui.ScreenSecurity
 [![NuGet](https://img.shields.io/nuget/v/Plugin.Maui.ScreenSecurity.svg?label=NuGet)](https://www.nuget.org/packages/Plugin.Maui.ScreenSecurity) [![NuGet Downloads](https://img.shields.io/nuget/dt/Plugin.Maui.ScreenSecurity)](https://www.nuget.org/packages/Plugin.Maui.ScreenSecurity/#versions-body-tab) [![Buy Me a Coffee](https://img.shields.io/badge/support-buy%20me%20a%20coffee-FFDD00)](https://buymeacoffee.com/fabribertani)
 
 `Plugin.Maui.ScreenSecurity` provides a seamless solution for preventing content exposure, as well as blocking screenshots and recordings within your .NET MAUI application
 
 ## Platforms supported
-|Platform|Version|
-|-------------------|:------------------:|
-|.Net MAUI Android|API 21+|
-|.Net MAUI iOS|iOS 14+|
-|Windows|10.0.17763+|
+| Platform          |   Version   |
+|-------------------|:-----------:|
+| .Net MAUI Android | API 21+     |
+| .Net MAUI iOS.    | iOS 14.2+   |
+| Windows           | 10.0.17763+ |
 
-## Version 1.2.2
+## Version 1.2.3
 
 ### What's new?
-- Removed .Net7 support. :warning:
-- Added .Net9 support for all platforms.
-- Code improvements were applied.
-- Fixed an issue where blur protection was not being disabled.
-- Fixed a bug that prevented samples projects from compiling.
-- Fixed package build to properly include Windows platform.
+- Added the `ThrowErrors` property to allow users to catch exceptions with the new error handling implementation.
+- Added better hooks, error handling and logging.
+- Added support for Windows 10 Version 2004 and above.
+- Applied code improvements to the library.
+- Updated sample project.
+- Changed CHANGELOG date format to **ISO 8601** `(yyyy-MM-dd)`.
+- Fixed the issue where the screen protection code was not running on the main thread.
 
-Click [here](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/releases/tag/v1.2.2) to see the full Changelog!
+Click [here](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/releases/tag/v1.2.3) to see the full Changelog!
 
 ## Installation
 `Plugin.Maui.ScreenSecurity` is available via NuGet, grab the latest package and install it on your solution:
 
-    Install-Package Plugin.Maui.ScreenSecurity
+    dotnet add package Plugin.Maui.ScreenSecurity --version 1.2.3
 
 Initialize the plugin in your `MauiProgram` class:
 
@@ -57,13 +60,8 @@ In your `Android.manifest` file (Platforms/Android) add the following permission
 <uses-permission android:name="android.permission.DETECT_SCREEN_CAPTURE" />
 ```
 
-### Using Plugin.Maui.ScreenSecurity
+## Using Plugin.Maui.ScreenSecurity
 
-Finally, add the default instance of the plugin as a singleton to inject it in your code late:
-
-```csharp
-builder.Services.AddSingleton<IScreenSecurity>(ScreenSecurity.Default);
-```
 ## :warning:  WARNING  :warning:
 It's important to acknowledge that preventing users from taking screenshots or recordings of your app can be a challenging task and achieving complete prevention may not be feasible. It's worth noting that no method can entirely eliminate the possibility of your screen being captured through another physical device or a potential breach in the OS.
 
@@ -122,6 +120,11 @@ bool IsProtectionEnabled { get; }
 This bool checks if screen protection is enabled.
 
 ```csharp
+ThrowErrors
+```
+This will allow users to catch exceptions with the new error handling implementation.
+
+```csharp
 event EventHandler<EventArgs>? ScreenCaptured;
 ```
 The event handler is triggered when the screen is captured, either through a screenshot or recording on Android and iOS, **but only for screenshots on Windows**.
@@ -138,6 +141,9 @@ public partial class MainPage : ContentPage
         InitializeComponent();
 
         _screenSecurity = screenSecurity;
+
+        // Set to true if you want to catch exceptions.
+        _screenSecurity.ThrowErrors = true;
     }
 
     protected override void OnAppearing()
@@ -147,8 +153,15 @@ public partial class MainPage : ContentPage
         // Check if screen security protection is not enabled
         if (!_screenSecurity.IsProtectionEnabled)
         {
-            // Activate the screen security protection with default settings
-            _screenSecurity.ActivateScreenSecurityProtection();
+            try
+            {
+                // Activate the screen security protection with default settings
+                _screenSecurity.ActivateScreenSecurityProtection();
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception here...
+            }
         }
 
         // Attach to the ScreenCaptured event handler
@@ -201,10 +214,10 @@ public partial class MainPage : ContentPage
 Refer to the [samples folder](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/tree/main/samples) for a detailed implementation of this plugin for both Maui and Blazor, which will give you a complete understanding of its usage.
 
 ## Contributions
-Please feel free to open an [Issue](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/issues) if you encounter any bugs or submit a PR to contribute improvements or fixes. Your contributions are greatly appreciated.
+Feel free to open an [Issue](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/issues) if you encounter any bugs or submit a PR to contribute improvements or fixes. Your contributions are greatly appreciated.
 
 ## License
-The Plugin.Maui.ScreenSecurity is licensed under [MIT](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/blob/main/LICENSE) license.
+Plugin.Maui.ScreenSecurity is licensed under [MIT](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/blob/main/LICENSE) license.
 
 ## Contributors
 
