@@ -69,7 +69,7 @@ internal class ScreenshotProtectionManager
                 {
                     if (window is not null)
                     {
-                        _secureTextField ??= new()
+                        _secureTextField = new()
                         {
                             UserInteractionEnabled = false
                         };
