@@ -16,11 +16,7 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
     // Windows 10, version 2004 and later
     private const uint WDA_EXCLUDEFROMCAPTURE = 0x00000011;
 
-#if NET9_0_OR_GREATER
     private static readonly Lock _stateLock = new();
-#else
-    private static readonly object _stateLock = new();
-#endif
 
     public ScreenSecurityImplementation()
     {
@@ -39,11 +35,7 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
     /// </summary>
     public void ActivateScreenSecurityProtection()
     {
-#if NET9_0_OR_GREATER
         lock (_stateLock)
-#else
-        lock (_stateLock)
-#endif
         {
             if (IsProtectionEnabled)
                 return;
@@ -97,11 +89,7 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
     /// </summary>
     public void DeactivateScreenSecurityProtection()
     {
-#if NET9_0_OR_GREATER
         lock (_stateLock)
-#else
-        lock (_stateLock)
-#endif
         {
             if (!IsProtectionEnabled)
                 return;

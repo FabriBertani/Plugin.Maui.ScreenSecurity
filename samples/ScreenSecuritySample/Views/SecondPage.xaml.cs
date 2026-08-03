@@ -42,6 +42,6 @@ public partial class SecondPage : ContentPage
         string title = "ScreenSecuritySample";
         string message = "Screen was captured by screenshot or recording.";
 
-        await Shell.Current.DisplayAlert(title, message, "Ok");
+        await Shell.Current.DisplayAlertAsync(title, message, "Ok");
     }
 }

@@ -6,11 +6,7 @@ namespace Plugin.Maui.ScreenSecurity.Platforms.Windows;
 
 internal partial class NativeMethods
 {
-#if NET9_0_OR_GREATER
     private static readonly Lock _hookLock = new();
-#else
-    private static readonly object _hookLock = new();
-#endif
 
     private const int WH_KEYBOARD_LL = 13;
     private const int WM_KEYDOWN = 0x0100;
@@ -51,11 +47,7 @@ internal partial class NativeMethods
 
     public static IntPtr SetHook(LowLevelKeyboardProc proc)
     {
-#if NET9_0_OR_GREATER
         lock (_hookLock)
-#else
-        lock (_hookLock)
-#endif
         {
             _hookRefCount++;
 
@@ -89,11 +81,7 @@ internal partial class NativeMethods
 
     public static void Unhook()
     {
-#if NET9_0_OR_GREATER
         lock (_hookLock)
-#else
-        lock (_hookLock)
-#endif
         {
             if (_hookRefCount > 0)
                 _hookRefCount--;

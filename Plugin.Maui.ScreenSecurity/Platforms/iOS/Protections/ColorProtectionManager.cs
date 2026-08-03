@@ -6,11 +6,7 @@ namespace Plugin.Maui.ScreenSecurity.Platforms.iOS;
 
 internal class ColorProtectionManager
 {
-#if NET9_0_OR_GREATER
     private static readonly Lock _lock = new();
-#else
-    private static readonly object _lock = new();
-#endif
 
     private static bool _enabled;
 
@@ -21,11 +17,7 @@ internal class ColorProtectionManager
 
     internal static void HandleColorProtection(bool enabled, bool throwErrors, string hexColor = "", UIWindow? window = null)
     {
-#if NET9_0_OR_GREATER
         lock (_lock)
-#else
-        lock (_lock)
-#endif
         {
             // If state hasn't changed and observers are already set, skip re-subscribing
             if (_enabled == enabled
