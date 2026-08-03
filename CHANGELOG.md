@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.3.0 (2026/08/03)
+[Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.2.3...v1.3.0)
+
+**Implemented enhancements:**
+- Removed .NET MAUI 8 platform support.
+- Added .NET MAUI 10 support to all platforms.
+- Removed implementation finalisers.
+- Added protection checks.
+- Improved code clarity.
+- Updated sample project.
+
+**Fixed bugs:**
+- Fixed [#65 (CALayerInvalid layer cycle crash on iOS 16)](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/issues/65)
+
 ## 1.2.3 (2025/10/09)
 [Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.2.2...v1.2.3)
 
