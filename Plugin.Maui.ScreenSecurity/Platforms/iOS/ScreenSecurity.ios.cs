@@ -19,11 +19,6 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
         ScreenCaptureEventHandler.ScreenCaptured += OnScreenCaptured;
     }
 
-    ~ScreenSecurityImplementation()
-    {
-        Dispose(false);
-    }
-
     /// <summary>
     /// Activates screen security protection when the app is sent
     /// to <b>Recents screen</b> or the <b>App Switcher</b>.
@@ -31,15 +26,23 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
     /// </summary>
     public void ActivateScreenSecurityProtection()
     {
-        GetWindow();
+        if (IsProtectionEnabled)
+            return;
 
-        EnableScreenCapturedEvent();
+        ExecuteOnMainThread(() =>
+        {
+            TearDownExistingProtection();
 
-        BlurProtectionManager.HandleBlurProtection(true, ThrowErrors, IOSHelpers.GetCurrentTheme(), _window);
+            GetWindow();
 
-        HandleScreenCaptureProtection(true, true);
+            EnableScreenCapturedEvent();
 
-        IsProtectionEnabled = true;
+            BlurProtectionManager.HandleBlurProtection(true, ThrowErrors, IOSHelpers.GetCurrentTheme(), _window);
+
+            HandleScreenCaptureProtection(true, true);
+
+            IsProtectionEnabled = true;
+        });
     }
 
     /// <summary>
@@ -56,16 +59,24 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
     /// </remarks>
     public void ActivateScreenSecurityProtection(bool blurScreenProtection = true, bool preventScreenshot = true, bool preventScreenRecording = true)
     {
-        GetWindow();
+        if (IsProtectionEnabled)
+            return;
 
-        EnableScreenCapturedEvent();
+        ExecuteOnMainThread(() =>
+        {
+            TearDownExistingProtection();
 
-        if (blurScreenProtection)
-            BlurProtectionManager.HandleBlurProtection(true, ThrowErrors, IOSHelpers.GetCurrentTheme(), _window);
+            GetWindow();
 
-        HandleScreenCaptureProtection(preventScreenshot, preventScreenRecording);
+            EnableScreenCapturedEvent();
 
-        IsProtectionEnabled = true;
+            if (blurScreenProtection)
+                BlurProtectionManager.HandleBlurProtection(true, ThrowErrors, IOSHelpers.GetCurrentTheme(), _window);
+
+            HandleScreenCaptureProtection(preventScreenshot, preventScreenRecording);
+
+            IsProtectionEnabled = true;
+        });
     }
 
     /// <summary>
@@ -83,44 +94,52 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
     /// </remarks>
     public void ActivateScreenSecurityProtection(ScreenProtectionOptions screenProtectionOptions)
     {
-        GetWindow();
+        if (IsProtectionEnabled)
+            return;
 
-        EnableScreenCapturedEvent();
-
-        if (!string.IsNullOrEmpty(screenProtectionOptions.HexColor)
-            && string.IsNullOrEmpty(screenProtectionOptions.Image))
+        ExecuteOnMainThread(() =>
         {
-            if (screenProtectionOptions.HexColor.IsHexColor())
-                ColorProtectionManager.HandleColorProtection(true, ThrowErrors, screenProtectionOptions.HexColor, _window);
-            else
+            TearDownExistingProtection();
+
+            GetWindow();
+
+            EnableScreenCapturedEvent();
+
+            if (!string.IsNullOrEmpty(screenProtectionOptions.HexColor)
+                && string.IsNullOrEmpty(screenProtectionOptions.Image))
             {
-                var invalidHexadecimalColorMessage = $"{screenProtectionOptions.HexColor} is not a valid hexadecimal color.";
+                if (screenProtectionOptions.HexColor.IsHexColor())
+                    ColorProtectionManager.HandleColorProtection(true, ThrowErrors, screenProtectionOptions.HexColor, _window);
+                else
+                {
+                    var invalidHexadecimalColorMessage = $"{screenProtectionOptions.HexColor} is not a valid hexadecimal color.";
 
-                System.Diagnostics.Trace.TraceError(invalidHexadecimalColorMessage);
+                    System.Diagnostics.Trace.TraceError(invalidHexadecimalColorMessage);
 
-                if (ThrowErrors)
-                    throw new ArgumentException(invalidHexadecimalColorMessage);
+                    if (ThrowErrors)
+                        throw new ArgumentException(invalidHexadecimalColorMessage);
+                }
             }
-        }
-        else if (!string.IsNullOrEmpty(screenProtectionOptions.Image)
-            && string.IsNullOrEmpty(screenProtectionOptions.HexColor))
-        {
-            if (screenProtectionOptions.Image.IsValidImage())
-                ImageProtectionManager.HandleImageProtection(true, ThrowErrors, screenProtectionOptions.Image, _window);
-            else
+            else if (!string.IsNullOrEmpty(screenProtectionOptions.Image)
+                && string.IsNullOrEmpty(screenProtectionOptions.HexColor))
             {
-                var invalidImageFormatMessage = $"{screenProtectionOptions.Image} is not a valid image format.";
+                if (screenProtectionOptions.Image.IsValidImage())
+                    ImageProtectionManager.HandleImageProtection(true, ThrowErrors, screenProtectionOptions.Image, _window);
+                else
+                {
+                    var invalidImageFormatMessage = $"{screenProtectionOptions.Image} is not a valid image format.";
 
-                System.Diagnostics.Trace.TraceError(invalidImageFormatMessage);
+                    System.Diagnostics.Trace.TraceError(invalidImageFormatMessage);
 
-                if (ThrowErrors)
-                    throw new ArgumentException(invalidImageFormatMessage);
+                    if (ThrowErrors)
+                        throw new ArgumentException(invalidImageFormatMessage);
+                }
             }
-        }
 
-        HandleScreenCaptureProtection(screenProtectionOptions.PreventScreenshot, screenProtectionOptions.PreventScreenRecording);
+            HandleScreenCaptureProtection(screenProtectionOptions.PreventScreenshot, screenProtectionOptions.PreventScreenRecording);
 
-        IsProtectionEnabled = true;
+            IsProtectionEnabled = true;
+        });
     }
 
     /// <summary>
@@ -128,17 +147,15 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
     /// </summary>
     public void DeactivateScreenSecurityProtection()
     {
-        BlurProtectionManager.HandleBlurProtection(false, ThrowErrors);
+        if (!IsProtectionEnabled)
+            return;
 
-        ColorProtectionManager.HandleColorProtection(false, ThrowErrors);
+        ExecuteOnMainThread(() =>
+        {
+            TearDownExistingProtection();
 
-        ImageProtectionManager.HandleImageProtection(false, ThrowErrors);
-
-        ScreenRecordingProtectionManager.HandleScreenRecordingProtection(false, ThrowErrors);
-
-        ScreenshotProtectionManager.HandleScreenshotProtection(false, ThrowErrors);
-
-        IsProtectionEnabled = false;
+            IsProtectionEnabled = false;
+        });
     }
 
     /// <summary>
@@ -165,41 +182,32 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
 
     private void EnableScreenCapturedEvent()
     {
-        _screenshotObserver = UIApplication.Notifications.ObserveUserDidTakeScreenshot((sender, args) =>
+        if (_screenshotObserver is null)
         {
-            ScreenCaptureEventHandler.RaiseScreenCaptured();
-        });
+            _screenshotObserver = UIApplication.Notifications.ObserveUserDidTakeScreenshot((sender, args) =>
+            {
+                ScreenCaptureEventHandler.RaiseScreenCaptured();
+            });
+        }
 
-        _screenCapturedObserver = UIScreen.Notifications.ObserveCapturedDidChange((sender, args) =>
+        if (_screenCapturedObserver is null)
         {
-            ScreenCaptureEventHandler.RaiseScreenCaptured();
-        });
+            _screenCapturedObserver = UIScreen.Notifications.ObserveCapturedDidChange((sender, args) =>
+            {
+                ScreenCaptureEventHandler.RaiseScreenCaptured();
+            });
+        }
     }
 
     /// <summary>
-    /// Ensures that <c>_window</c> is initialized with the current UIWindow instance.
-    /// If called from the main thread, the window is set synchronously.
-    /// If called from a background thread, the assignment is dispatched asynchronously to the main thread.
-    /// <para><b>Note:</b> If you call this method from a background thread, <c>_window</c> may not be immediately available
-    /// after the call returns, as the assignment happens asynchronously. Any code that depends on <c>_window</c>
-    /// being set should either ensure it runs on the main thread or handle the possibility that <c>_window</c> is still null.</para>
+    /// Ensures that <c>_window</c> is initialized with the current UIWindow instance..
     /// </summary>
     private void GetWindow()
     {
         if (_window is not null)
             return;
 
-        if (MainThread.IsMainThread)
-        {
-            _window = IOSHelpers.GetWindow();
-        }
-        else
-        {
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                _window ??= IOSHelpers.GetWindow();
-            });
-        }
+        _window = IOSHelpers.GetWindow();
     }
 
     private void OnScreenCaptured(object? sender, EventArgs e)
@@ -207,13 +215,36 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
         ScreenCaptured?.Invoke(this, EventArgs.Empty);
     }
 
+    private void ExecuteOnMainThread(Action action)
+    {
+        if (MainThread.IsMainThread)
+        {
+            action();
+
+            return;
+        }
+
+        MainThread.BeginInvokeOnMainThread(action);
+    }
+
+    private void TearDownExistingProtection()
+    {
+        BlurProtectionManager.HandleBlurProtection(false, ThrowErrors);
+
+        ColorProtectionManager.HandleColorProtection(false, ThrowErrors);
+
+        ImageProtectionManager.HandleImageProtection(false, ThrowErrors);
+
+        ScreenRecordingProtectionManager.HandleScreenRecordingProtection(false, ThrowErrors);
+
+        ScreenshotProtectionManager.HandleScreenshotProtection(false, ThrowErrors);
+    }
+
     #region Disposables
 
     public void Dispose()
     {
         Dispose(true);
-
-        GC.SuppressFinalize(this);
     }
 
     protected virtual void Dispose(bool disposing)

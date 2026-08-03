@@ -23,11 +23,6 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
         ScreenCaptureEventHandler.ScreenCaptured += OnScreenCaptured;
     }
 
-    ~ScreenSecurityImplementation()
-    {
-        Dispose(false);
-    }
-
     /// <summary>
     /// Activates screen security protection when the app is sent
     /// to <b>Recents screen</b> or the <b>App Switcher</b>.
@@ -35,6 +30,9 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
     /// </summary>
     public void ActivateScreenSecurityProtection()
     {
+        if (IsProtectionEnabled)
+            return;
+
         lock (_stateLock)
         {
             if (IsProtectionEnabled)
@@ -63,6 +61,9 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
     /// </remarks>
     public void ActivateScreenSecurityProtection(bool blurScreenProtection, bool preventScreenshot, bool preventScreenRecording)
     {
+        if (IsProtectionEnabled)
+            return;
+
         ActivateScreenSecurityProtection();
     }
 
@@ -81,6 +82,9 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
     /// </remarks>
     public void ActivateScreenSecurityProtection(ScreenProtectionOptions screenProtectionOptions)
     {
+        if (IsProtectionEnabled)
+            return;
+
         ActivateScreenSecurityProtection();
     }
 
@@ -89,6 +93,9 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
     /// </summary>
     public void DeactivateScreenSecurityProtection()
     {
+        if (!IsProtectionEnabled)
+            return;
+
         lock (_stateLock)
         {
             if (!IsProtectionEnabled)
@@ -193,8 +200,6 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
     public void Dispose()
     {
         Dispose(true);
-
-        GC.SuppressFinalize(this);
     }
 
     protected virtual void Dispose(bool disposing)
