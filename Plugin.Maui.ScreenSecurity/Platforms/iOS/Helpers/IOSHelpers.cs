@@ -36,8 +36,6 @@ internal static class IOSHelpers
                 .SelectMany(s => s.Windows)
                 .FirstOrDefault(w => w.IsKeyWindow);
         }
-        else if (UIDevice.CurrentDevice.CheckSystemVersion(14, 2))
-            return UIApplication.SharedApplication.Windows.FirstOrDefault(o => o.IsKeyWindow);
         else
             return UIApplication.SharedApplication.KeyWindow;
     }
