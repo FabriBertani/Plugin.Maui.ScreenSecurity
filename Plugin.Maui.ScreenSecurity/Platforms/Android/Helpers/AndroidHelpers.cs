@@ -7,7 +7,7 @@ using Object = Java.Lang.Object;
 
 namespace Plugin.Maui.ScreenSecurity.Platforms.Android;
 
-internal class CustomScreenCaptureCallback : Object, IScreenCaptureCallback
+internal sealed class CustomScreenCaptureCallback : Object, IScreenCaptureCallback
 {
     public void OnScreenCaptured()
     {
@@ -15,7 +15,7 @@ internal class CustomScreenCaptureCallback : Object, IScreenCaptureCallback
     }
 }
 
-internal class MainThreadExecutor : Object, IExecutor
+internal sealed class MainThreadExecutor : Object, IExecutor
 {
     private readonly Handler _handler = new(Looper.MainLooper ?? throw new InvalidOperationException("MainLooper is null"));
 

@@ -7,7 +7,7 @@ public class ScreenProtectionOptions
     private string _image = string.Empty;
 
     /// <summary>
-    /// Hexadecimal color as <b><c>string</c></b> in the form of 
+    /// Hexadecimal color as <b><c>string</c></b> in the form of
     /// <b><c>#RGB</c></b>, <b><c>#RGBA</c></b>, <b><c>#RRGGBB</c></b> or <b><c>#RRGGBBAA</c></b>.
     /// This cannot be set if the <b><c>Image</c></b> property is already set.
     /// </summary>
@@ -16,8 +16,18 @@ public class ScreenProtectionOptions
         get => _hexColor;
         set
         {
-            if (string.IsNullOrEmpty(Image) && !string.IsNullOrEmpty(value))
-                _hexColor = value;
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                _hexColor = string.Empty;
+
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(Image))
+                throw new InvalidOperationException("Image is already set. Clear Image before setting HexColor.");
+
+            _hexColor = value;
+            _image = string.Empty;
         }
     }
 
@@ -30,8 +40,18 @@ public class ScreenProtectionOptions
         get => _image;
         set
         {
-            if (string.IsNullOrEmpty(HexColor) && !string.IsNullOrEmpty(value))
-                _image = value;
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                _image = string.Empty;
+
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(HexColor))
+                throw new InvalidOperationException("HexColor is already set. Clear HexColor before setting HexColor.");
+
+            _image = value;
+            _hexColor = string.Empty;
         }
     }
 

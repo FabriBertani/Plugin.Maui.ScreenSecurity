@@ -4,22 +4,22 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity
 {
     public void ActivateScreenSecurityProtection()
     {
-        throw new NotImplementedException();
+        throw new PlatformNotSupportedException();
     }
 
     public void ActivateScreenSecurityProtection(bool blurScreenProtection, bool preventScreenshot, bool preventScreenRecording)
     {
-        throw new NotImplementedException();
+        throw new PlatformNotSupportedException();
     }
 
     public void ActivateScreenSecurityProtection(ScreenProtectionOptions screenProtectionOptions)
     {
-        throw new NotImplementedException();
+        throw new PlatformNotSupportedException();
     }
 
     public void DeactivateScreenSecurityProtection()
     {
-        throw new NotImplementedException();
+        throw new PlatformNotSupportedException();
     }
 
     public bool IsProtectionEnabled { get; private set; }

@@ -12,11 +12,6 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
         ScreenCaptureEventHandler.ScreenCaptured += OnScreenCaptured;
     }
 
-    ~ScreenSecurityImplementation()
-    {
-        Dispose(false);
-    }
-
     /// <summary>
     /// Activates screen security protection when the app is sent
     /// to <b>Recents screen</b> or the <b>App Switcher</b>.
@@ -24,6 +19,9 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
     /// </summary>
     public void ActivateScreenSecurityProtection()
     {
+        if (IsProtectionEnabled)
+            return;
+
         SetScreenSecurityProtection(true);
     }
 
@@ -41,6 +39,9 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
     /// </remarks>
     public void ActivateScreenSecurityProtection(bool blurScreenProtection, bool preventScreenshot, bool preventScreenRecording)
     {
+        if (IsProtectionEnabled)
+            return;
+
         ActivateScreenSecurityProtection();
     }
 
@@ -59,6 +60,9 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
     /// </remarks>
     public void ActivateScreenSecurityProtection(ScreenProtectionOptions screenProtectionOptions)
     {
+        if (IsProtectionEnabled)
+            return;
+
         ActivateScreenSecurityProtection();
     }
 
@@ -67,6 +71,9 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
     /// </summary>
     public void DeactivateScreenSecurityProtection()
     {
+        if (!IsProtectionEnabled)
+            return;
+
         SetScreenSecurityProtection(false);
     }
 
@@ -84,10 +91,12 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
                 if (OperatingSystem.IsAndroidVersionAtLeast(33))
                     activity.SetRecentsScreenshotEnabled(!enabled);
 
+                var window = activity.Window;
+
                 if (enabled)
-                    activity.Window?.SetFlags(WindowManagerFlags.Secure, WindowManagerFlags.Secure);
+                    window?.SetFlags(WindowManagerFlags.Secure, WindowManagerFlags.Secure);
                 else
-                    activity.Window?.ClearFlags(WindowManagerFlags.Secure);
+                    window?.ClearFlags(WindowManagerFlags.Secure);
 
                 IsProtectionEnabled = enabled;
             }
@@ -123,8 +132,6 @@ internal partial class ScreenSecurityImplementation : IScreenSecurity, IDisposab
     public void Dispose()
     {
         Dispose(true);
-
-        GC.SuppressFinalize(this);
     }
 
     protected virtual void Dispose(bool disposing)
