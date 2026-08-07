@@ -91,47 +91,58 @@ internal class BlurProtectionManager
         }
     }
 
-    private static void EnableBlurScreenProtection(UIWindow? window = null, ThemeStyle? style = null)
-    {
-        if (window is null)
-            return;
-
-        MainThread.BeginInvokeOnMainThread(() =>
-        {
-            var blurEffectStyle = style switch
-            {
-                ThemeStyle.Light => UIBlurEffectStyle.Light,
-                _ => UIBlurEffectStyle.Dark
-            };
-
-            using var blurEffect = UIBlurEffect.FromStyle(blurEffectStyle);
-
-            _blurBackground = new UIVisualEffectView(blurEffect)
-            {
-                Frame = window.Frame
-            };
-
-            window.AddSubview(_blurBackground);
+    private static void EnableBlurScreenProtection(UIWindow? window = null, ThemeStyle? style = null) {
+        MainThread.BeginInvokeOnMainThread(() => {
+            AddBlurScreenProtection(window,style);
         });
+    }
+
+    private static void AddBlurScreenProtection(UIWindow? window = null, ThemeStyle? style = null) {
+        var target = window ?? IOSHelpers.GetWindow();
+        if (target is null)
+            return;
+        
+        DisableBlurScreenProtection(target);
+        var blurEffectStyle = style switch
+        {
+            ThemeStyle.Light => UIBlurEffectStyle.Light,
+            _ => UIBlurEffectStyle.Dark
+        };
+
+        using var blurEffect = UIBlurEffect.FromStyle(blurEffectStyle);
+
+        _blurBackground = new UIVisualEffectView(blurEffect)
+        {
+            Frame = target.Bounds,
+            AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
+        };
+
+        target.AddSubview(_blurBackground);
     }
 
     private static void DisableBlurScreenProtection(UIWindow? window)
     {
-        if (window is null)
-            return;
-
-        MainThread.BeginInvokeOnMainThread(() =>
-        {
-            foreach (var subview in window.Subviews)
-            {
-                if (subview is UIVisualEffectView)
-                {
-                    subview.RemoveFromSuperview();
-                }
-            }
-
-            _blurBackground = null;
+        MainThread.BeginInvokeOnMainThread(() => {
+            RemoveBlurScreenProtection(window);
         });
+    }
+
+    private static void RemoveBlurScreenProtection(UIWindow? window) {
+        _blurBackground?.RemoveFromSuperview();
+        _blurBackground = null;
+            
+        var target = window ?? IOSHelpers.GetWindow();
+
+        if (target is null)
+            return;
+            
+        foreach (var subview in target.Subviews)
+        {
+            if (subview is UIVisualEffectView)
+            {
+                subview.RemoveFromSuperview();
+            }
+        }
     }
 
     private static void DisposeObservers()
