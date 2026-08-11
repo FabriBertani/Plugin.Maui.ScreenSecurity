@@ -102,7 +102,7 @@ internal class BlurProtectionManager
         if (target is null)
             return;
 
-        DisableBlurScreenProtection(target);
+        RemoveBlurScreenProtection(target);
         var blurEffectStyle = style switch
         {
             ThemeStyle.Light => UIBlurEffectStyle.Light,
@@ -131,6 +131,7 @@ internal class BlurProtectionManager
     private static void RemoveBlurScreenProtection(UIWindow? window)
     {
         _blurBackground?.RemoveFromSuperview();
+        _blurBackground?.Dispose();
         _blurBackground = null;
 
         var target = window ?? IOSHelpers.GetWindow();
