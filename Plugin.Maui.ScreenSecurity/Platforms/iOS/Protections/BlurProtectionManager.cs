@@ -54,10 +54,7 @@ internal class BlurProtectionManager
             {
                 try
                 {
-                    MainThread.BeginInvokeOnMainThread(() =>
-                    {
-                        DisableBlurScreenProtection(window);
-                    });
+                    MainThread.BeginInvokeOnMainThread(() => { DisableBlurScreenProtection(window); });
                 }
                 catch (Exception ex)
                 {
@@ -91,17 +88,20 @@ internal class BlurProtectionManager
         }
     }
 
-    private static void EnableBlurScreenProtection(UIWindow? window = null, ThemeStyle? style = null) {
-        MainThread.BeginInvokeOnMainThread(() => {
-            AddBlurScreenProtection(window,style);
+    private static void EnableBlurScreenProtection(UIWindow? window = null, ThemeStyle? style = null)
+    {
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            AddBlurScreenProtection(window, style);
         });
     }
 
-    private static void AddBlurScreenProtection(UIWindow? window = null, ThemeStyle? style = null) {
+    private static void AddBlurScreenProtection(UIWindow? window = null, ThemeStyle? style = null)
+    {
         var target = window ?? IOSHelpers.GetWindow();
         if (target is null)
             return;
-        
+
         DisableBlurScreenProtection(target);
         var blurEffectStyle = style switch
         {
@@ -122,20 +122,22 @@ internal class BlurProtectionManager
 
     private static void DisableBlurScreenProtection(UIWindow? window)
     {
-        MainThread.BeginInvokeOnMainThread(() => {
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
             RemoveBlurScreenProtection(window);
         });
     }
 
-    private static void RemoveBlurScreenProtection(UIWindow? window) {
+    private static void RemoveBlurScreenProtection(UIWindow? window)
+    {
         _blurBackground?.RemoveFromSuperview();
         _blurBackground = null;
-            
+
         var target = window ?? IOSHelpers.GetWindow();
 
         if (target is null)
             return;
-            
+
         foreach (var subview in target.Subviews)
         {
             if (subview is UIVisualEffectView)
