@@ -1,7 +1,15 @@
 # Changelog
 
+## 1.3.1 (2026/08/16)
+[Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.3.0...v1.3.1)
+
 ## 1.3.0 (2026/08/03)
 [Full Changelog](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/compare/v1.2.3...v1.3.0)
+
+**Fixed bugs:**
+- Fixed [#71 (Background Blur: Blur only covers half the screen when rotating between portait and landscape (IOS) )](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/issues/71).
+- Fixed [#72 (IOS Background Blur: Dotnet 10 - Blur doesn't dismiss when returning to the app)](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/issues/72).
+- Merged [#70 Dotnet10 Fix blur](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/pull/70) PR by [johnbickler](https://github.com/johnbickler).
 
 **Implemented enhancements:**
 - Removed .NET MAUI 8 platform support.
