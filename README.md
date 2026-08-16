@@ -12,22 +12,21 @@
 | .Net MAUI iOS.    | iOS 15.0+   |
 | Windows           | 10.0.17763+ |
 
-## Version 1.3.0
+## Version 1.3.1
 
 ### What's new?
 - Removed .NET MAUI 8 platform support.
 - Added .NET MAUI 10 support to all platforms.
 - Removed implementation finalisers.
 - Added protection checks.
-- Improved code clarity.
-- Updated sample project.
+- Fixed .NET MAUI 10 blur issues on iOS
 
-Click [here](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/releases/tag/v1.3.0) to see the full Changelog!
+Click [here](https://github.com/FabriBertani/Plugin.Maui.ScreenSecurity/releases/tag/v1.3.1) to see the full Changelog!
 
 ## Installation
 `Plugin.Maui.ScreenSecurity` is available via NuGet, grab the latest package and install it on your solution:
 
-    dotnet add package Plugin.Maui.ScreenSecurity --version 1.3.0
+    dotnet add package Plugin.Maui.ScreenSecurity --version 1.3.1
 
 Initialize the plugin in your `MauiProgram` class:
 
@@ -222,4 +221,4 @@ Plugin.Maui.ScreenSecurity is licensed under [MIT](https://github.com/FabriBerta
 
 * **[Goran Karacic](https://github.com/Gogzs)** for the iOS 17 fix.
 * **[fabien367](https://github.com/fabien367)** for the iOS leak fix.
-* **[johnbickler](https://github.com/johnbickler)** for the `CALayerInvalid` layer cycle crash on iOS 16 fix.
+* **[johnbickler](https://github.com/johnbickler)** for the `CALayerInvalid` layer cycle crash on iOS 16 and .NET MAUI 10 blur issues fixes.
